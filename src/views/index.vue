@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-02-15 14:41:24
+ * @LastEditTime: 2022-02-16 10:06:37
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \tesssst\src\views\index.vue
+-->
 <template>
   <!-- <el-container class="index-con">
     <el-header class="index-header">
@@ -63,10 +71,10 @@ export default {
   // 挂载前状态(里面是操作)
   beforeMount() {
     // 弹出登录成功
-    this.$message({
-      message: '登录成功',
-      type: 'success'
-    })
+    // this.$message({
+    //   message: '登录成功',
+    //   type: 'success'
+    // })
   }
 }
 </script>

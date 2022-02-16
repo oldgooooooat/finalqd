@@ -3,13 +3,16 @@
     <el-form label-position="left" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm login-container">
       <h3 class="title">用户登录</h3>
       <el-form-item prop="username">
+                    <el-tag>用户名</el-tag>
         <el-input type="text" v-model="ruleForm.username" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="password">
+           <el-tag>密码</el-tag>  
         <el-input type="password" v-model="ruleForm.password" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
-  
-
+    <el-form-item style="width:100%;">
+        <el-button type="primary" style="width:100%;" @click="registForm()" :loading="logining">注册</el-button>
+    </el-form-item> 
       <el-form-item style="width:100%;">
         <el-button type="primary" style="width:100%;" @click="submitForm('ruleForm')" :loading="logining">登录</el-button>
       </el-form-item>
@@ -27,7 +30,7 @@ export default {
       //定义loading默认为false
       logining: false,
       // 记住密码
-      rememberpwd: false,
+    
       ruleForm: {
         //username和password默认为空
         username: '',
@@ -51,25 +54,28 @@ export default {
   },
   // 里面的函数只有调用才会执行
   methods: {
- 
+     registForm(){
+                       this.$router.push('/regist');
+     },
     //获取info列表
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          login(this.ruleForm).then(resp=>{
-            if(resp.status=="200")
-            {
-              console.log(resp.obj)
-              window.sessionStorage.setItem("user", JSON.stringify(resp.obj));
-              this.$store.commit('login', 'true')
-            this.$router.push({ path: '/goods/Goods' })
+this.postKeyValueRequest('/api/doLogin',this.ruleForm).then(resp=>{            
+           if(resp.obj!=null)
+           {
+           
+              console.log(resp.status)
+               setTimeout(() => {
             this.logining = false
+            const user=JSON.stringify(resp.obj);
+               setCookie('user', user, 7)
+            this.$store.commit('login', 'true')
+            this.$router.push({ path: '/goods/Goods' })
+          }, 1000)
             }
-            else{
-               this.$message.error("账号密码错误");
-  
-
-            }
+           
+          
             
           })
           // this.logining = true
