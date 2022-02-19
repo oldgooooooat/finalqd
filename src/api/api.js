@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-11 08:51:02
- * @LastEditTime: 2022-02-11 09:00:17
+ * @LastEditTime: 2022-02-18 11:21:05
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \finalqd\src\utils\api.js
@@ -89,7 +89,10 @@ export const putRequest=(url, params)=>{
     return axios({
         method: 'put',
         url: `${base}${url}`,
-        data: params //这是用json来传递的，所以不用加transformRequest转换了
+        data: params, //这是用json来传递的，所以不用加transformRequest转换了
+        headers:{
+            'Content-Type':'application/json'
+        }
     })
 }
 

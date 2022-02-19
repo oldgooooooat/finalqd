@@ -1,331 +1,400 @@
-/**
- * 基础菜单 商品管理
- */
+
 <template>
   <div>
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>问题管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 搜索筛选 -->
-    <el-form :inline="true" :model="formInline" class="user-search">
-      <el-form-item label="搜索：">
-        <el-input size="small" v-model="formInline.deptName" placeholder="输入部门名称"></el-input>
-      </el-form-item>
-      <el-form-item label="">
-        <el-input size="small" v-model="formInline.deptNo" placeholder="输入部门代码"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button size="small" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
-        <el-button size="small" type="primary" icon="el-icon-plus" @click="handleEdit()">添加</el-button>
-      </el-form-item>
-    </el-form>
-    <!--列表-->
-    <el-table size="small" :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中" style="width: 100%;">
-      <el-table-column align="center" type="selection" width="60">
-      </el-table-column>
-      <el-table-column sortable prop="deptName" label="部门名称" width="300">
-      </el-table-column>
-      <el-table-column sortable prop="deptNo" label="部门代码" width="300">
-      </el-table-column>
-      <el-table-column sortable prop="editTime" label="修改时间" width="300">
-        <template slot-scope="scope">
-          <div>{{scope.row.editTime|timestampToTime}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="editUser" label="修改人" width="300">
-      </el-table-column>
-      <el-table-column align="center" label="操作" min-width="300">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="deleteUser(scope.$index, scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页组件 -->
-    <Pagination v-bind:child-msg="pageparm" @callFather="callFather"></Pagination>
-    <!-- 编辑界面 -->
-    <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog">
-      <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm">
-        <el-form-item label="部门名称" prop="deptName">
-          <el-input size="small" v-model="editForm.deptName" auto-complete="off" placeholder="请输入部门名称"></el-input>
-        </el-form-item>
-        <el-form-item label="部门代码" prop="deptNo">
-          <el-input size="small" v-model="editForm.deptNo" auto-complete="off" placeholder="请输入部门代码"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="closeDialog">取消</el-button>
-        <el-button size="small" type="primary" :loading="loading" class="title" @click="submitForm('editForm')">保存</el-button>
-      </div>
-    </el-dialog>
+    <!-- Form -->
+<el-button type="text" @click="dialogFormVisible = true" >打开嵌套表单的 Dialog</el-button>
+
+<el-dialog title="添加问题" :visible.sync="dialogFormVisible">
+ <el-steps :active="active" finish-status="success">
+  <el-step title="步骤 1"></el-step>
+  <el-step title="步骤 2"></el-step>
+</el-steps>
+
+  <el-form :model="form" :rules="rules" ref="FormRef" label-position="top" >
+   <el-form-item v-show="active2" label="问题名称" prop="questionname" >
+    <el-input v-model="form.questionname"></el-input>
+  </el-form-item>
+  <el-form-item v-show="active2" label="问题描述">
+    <el-input v-model="form.questioncontext"></el-input>
+  </el-form-item>
+  <el-form-item v-show="active2" label="问题难度">
+    <el-select v-model="form.difficulty" placeholder="请选择问题难度">
+      <el-option label="易" value="1"></el-option>
+      <el-option label="中" value="2"></el-option>
+      <el-option label="难" value="3"></el-option>
+    </el-select>
+
+  </el-form-item>
+  <el-form-item v-show="active2" label="问题类型">
+    <el-select v-model="form.option" placeholder="请选择问题类型">
+      <el-option label="单选题" value="1"></el-option>
+      <el-option label="多选题" value="2"></el-option>
+      <el-option label="判断题" value="3"></el-option>
+    </el-select>
+    
+  </el-form-item>
+
+
+  <el-form-item v-show="dx" label="正确答案" >
+    <el-input  v-model="form.answer"></el-input>
+
+
+  </el-form-item>
+  <el-form-item v-show="pd" label="正确答案" >
+  
+   <el-select   v-model="form.answer" placeholder="请选择正确答案">
+      <el-option label="对" value="1"></el-option>
+      <el-option label="错" value="2"></el-option>
+    </el-select>
+  </el-form-item>
+
+
+   <el-form-item v-show="dx"
+    v-for="(domain, index) in form.wanswer"
+    :label="'错误答案'"
+    :key="domain.key"
+    :prop="'wanswer.' + index + '.value'"
+    :rules="{
+      required: true, message: '错误答案不能为空', trigger: 'blur'
+    }"
+  >
+    <el-input v-model="domain.value"></el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
+  </el-form-item>
+  <el-form-item v-show="dx" >
+    <el-button @click="addDomain">新增错误选项</el-button>
+  </el-form-item> 
+
+  <el-form-item v-show="ddx"
+    v-for="(domain2, index) in form.ranswer"
+    :label="'正确答案'"
+    :key="domain2.key"
+    :prop="'ranswer.' + index + '.value'"
+    :rules="{
+      required: true, message: '正确不能为空', trigger: 'blur'
+    }"
+  >
+    <el-input v-model="domain2.value"></el-input><el-button @click.prevent="removeDomain2(domain2)">删除</el-button>
+  </el-form-item>
+
+   <el-form-item v-show="ddx"
+    v-for="(domain, index) in form.wanswer"
+    :label="'错误答案'"
+    :key="domain.key"
+    :prop="'wanswer.' + index + '.value'"
+    :rules="{
+      required: true, message: '错误答案不能为空', trigger: 'blur'
+    }"
+  >
+    <el-input v-model="domain.value"></el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
+  </el-form-item>
+   
+  <el-form-item v-show="ddx" >
+    <el-button @click="addDomain">新增错误选项</el-button>
+    <el-button @click="addDomain2">新增正确选项</el-button>
+
+  </el-form-item> 
+
+
+
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button v-show="active1"type="primary" @click="back">上一步</el-button>
+    <el-button v-show="active2" type="primary" @click="next">下一步</el-button>
+     <el-button v-show="active1"type="primary" @click="submitFrom()">提交</el-button>
+
+  </div>
+</el-dialog>
+<div>
+  <el-table
+    ref="multipleTable"
+    :data="tableData"
+    tooltip-effect="dark"
+    style="width: 100%"
+    @selection-change="handleSelectionChange">
+    <el-table-column
+      type="selection"
+      width="55">
+    </el-table-column>
+    <el-table-column
+      label="问题名称"
+      width="120">
+      <template slot-scope="scope">{{ scope.row.date }}</template>
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="问题分数"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="问题难度"
+      show-overflow-tooltip>
+    </el-table-column>
+     <el-table-column
+      prop="address"
+      label="问题类型"
+      show-overflow-tooltip>
+    </el-table-column>
+     <el-table-column
+      prop="address"
+      label="问题内容"
+      show-overflow-tooltip>
+    </el-table-column>
+       <el-table-column
+      prop="address"
+      label="操作"
+      show-overflow-tooltip>
+    </el-table-column>
+  </el-table>
+</div>
+
+
   </div>
 </template>
 
 <script>
-import { deptList, deptSave, deptDelete } from '../../api/userMG'
-import Pagination from '../../components/Pagination'
-export default {
-  data() {
-    return {
-      nshow: true, //switch开启
-      fshow: false, //switch关闭
-      loading: false, //是显示加载
-      editFormVisible: false, //控制编辑页面显示与隐藏
-      title: '添加',
-      editForm: {
-        deptId: '',
-        deptName: '',
-        deptNo: '',
-        token: localStorage.getItem('logintoken')
+import Pagination from '../../components/Pagination';
+import  { getCookie }from '../../utils/util.js';
+ export default {
+    data() {
+      return {
+        active: 0,
+        active1:false,
+        active2:true,
+        dx:false,
+        pd:false,
+        ddx:false,
+        
+        worry:1,
+        right:1,
+        dialogFormVisible: false,
+         formLabelWidth: '120px',
+        rules: {
+        questionname: [{ required: true, message: '请输入账号', trigger: 'blur' }]
       },
-      // rules表单验证
-      rules: {
-        deptName: [
-          { required: true, message: '请输入部门名称', trigger: 'blur' }
-        ],
-        deptNo: [{ required: true, message: '请输入部门代码', trigger: 'blur' }]
-      },
-      formInline: {
-        page: 1,
-        limit: 10,
-        varLable: '',
-        varName: '',
-        token: localStorage.getItem('logintoken')
-      },
-      // 删除部门
-      seletedata: {
-        ids: '',
-        token: localStorage.getItem('logintoken')
-      },
-      userparm: [], //搜索权限
-      listData: [], //用户数据
-      // 分页参数
-      pageparm: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 10
-      }
-    }
-  },
-  // 注册组件
-  components: {
-    Pagination
-  },
-  /**
-   * 数据发生改变
-   */
-
-  /**
-   * 创建完毕
-   */
-  created() {
-    this.getdata(this.formInline)
-  },
-
-  /**
-   * 里面的方法只有被调用才会执行
-   */
-  methods: {
-    // 获取公司列表
-    getdata(parameter) {
-      this.loading = true
-      // 模拟数据开始
-      let res = {
-        code: 0,
-        msg: null,
-        count: 5,
-        data: [
-          {
-            addUser: null,
-            editUser: null,
-            addTime: 1521062371000,
-            editTime: 1526700200000,
-            deptId: 2,
-            deptName: 'XX分公司',
-            deptNo: '1',
-            parentId: 1
-          },
-          {
-            addUser: null,
-            editUser: null,
-            addTime: 1521063247000,
-            editTime: 1526652291000,
-            deptId: 3,
-            deptName: '上海测试',
-            deptNo: '02',
-            parentId: 1
-          },
-          {
-            addUser: null,
-            editUser: null,
-            addTime: 1526349555000,
-            editTime: 1526349565000,
-            deptId: 12,
-            deptName: '1',
-            deptNo: '11',
-            parentId: 1
-          },
-          {
-            addUser: null,
-            editUser: null,
-            addTime: 1526373178000,
-            editTime: 1526373178000,
-            deptId: 13,
-            deptName: '5',
-            deptNo: '5',
-            parentId: 1
-          },
-          {
-            addUser: null,
-            editUser: null,
-            addTime: 1526453107000,
-            editTime: 1526453107000,
-            deptId: 17,
-            deptName: 'v',
-            deptNo: 'v',
-            parentId: 1
-          }
-        ]
-      }
-      this.loading = false
-      this.listData = res.data
-      this.pageparm.currentPage = this.formInline.page
-      this.pageparm.pageSize = this.formInline.limit
-      this.pageparm.total = res.count
-      // 模拟数据结束
-
-      /***
-       * 调用接口，注释上面模拟数据 取消下面注释
-       */
-      // deptList(parameter)
-      //   .then(res => {
-      //     this.loading = false
-      //     if (res.success == false) {
-      //       this.$message({
-      //         type: 'info',
-      //         message: res.msg
-      //       })
-      //     } else {
-      //       this.listData = res.data
-      //       // 分页赋值
-      //       this.pageparm.currentPage = this.formInline.page
-      //       this.pageparm.pageSize = this.formInline.limit
-      //       this.pageparm.total = res.count
-      //     }
-      //   })
-      //   .catch(err => {
-      //     this.loading = false
-      //     this.$message.error('菜单加载失败，请稍后再试！')
-      //   })
-    },
-    // 分页插件事件
-    callFather(parm) {
-      this.formInline.page = parm.currentPage
-      this.formInline.limit = parm.pageSize
-      this.getdata(this.formInline)
-    },
-    // 搜索事件
-    search() {
-      this.getdata(this.formInline)
-    },
-    //显示编辑界面
-    handleEdit: function(index, row) {
-      this.editFormVisible = true
-      if (row != undefined && row != 'undefined') {
-        this.title = '修改'
-        this.editForm.deptId = row.deptId
-        this.editForm.deptName = row.deptName
-        this.editForm.deptNo = row.deptNo
-      } else {
-        this.title = '添加'
-        this.editForm.deptId = ''
-        this.editForm.deptName = ''
-        this.editForm.deptNo = ''
-      }
-    },
-    // 编辑、增加页面保存方法
-    submitForm(editData) {
-      this.$refs[editData].validate(valid => {
-        if (valid) {
-          deptSave(this.editForm)
-            .then(res => {
-              this.editFormVisible = false
-              this.loading = false
-              if (res.success) {
-                this.getdata(this.formInline)
-                this.$message({
-                  type: 'success',
-                  message: '公司保存成功！'
-                })
-              } else {
-                this.$message({
-                  type: 'info',
-                  message: res.msg
-                })
-              }
-            })
-            .catch(err => {
-              this.editFormVisible = false
-              this.loading = false
-              this.$message.error('公司保存失败，请稍后再试！')
-            })
-        } else {
-          return false
+        form: {
+          userid:"",
+          wanswer: [{
+            value: ''
+          }],
+          wanswervalue:[],
+          ranswervalue:[],
+          ranswer: [{
+            value: ''
+          }],
+          questionname:null,
+          questioncontext: null,
+          difficulty: "1",
+          option:"1",
+          pdanswer:null,
+          answer:null,
         }
-      })
+       
+      };
+
     },
-    // 删除公司
-    deleteUser(index, row) {
-      this.$confirm('确定要删除吗?', '信息', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          deptDelete(row.deptId)
-            .then(res => {
-              if (res.success) {
-                this.$message({
-                  type: 'success',
-                  message: '公司已删除!'
-                })
-                this.getdata(this.formInline)
-              } else {
-                this.$message({
-                  type: 'info',
-                  message: res.msg
-                })
+     methods: {
+       submitFrom()
+       {
+          const user=JSON.parse(getCookie('user'));
+        this.form.userid=user.id;
+         var submit=true;
+         var submit2=true;
+         var submit3=true;
+         if(this.form.option=="1")
+         {
+           if(this.form.answer.replace(/(^s*)|(s*$)/g, "").length !=0)
+           { 
+           
+             for(let i=0; i<this.form.wanswer.length;i++ )
+              {
+                submit=true;
+                if(this.form.wanswer[i].value.replace(/(^s*)|(s*$)/g, "").length ==0)
+                {
+                  this.$message.error('请输入所有错误答案内容');
+                  submit=false;
+                  this.form.wanswervalue.length=0;
+                  break;
+                }
+                this.form.wanswervalue.push(this.form.wanswer[i].value);
+                
+                
               }
-            })
-            .catch(err => {
-              this.loading = false
-              this.$message.error('公司删除失败，请稍后再试！')
-            })
+             if(submit==true){
+               
+              this.postRequest('/api/question/addquestion',this.form ).then(resp=>{            
+                    this.form.wanswervalue.length=0;
+                    this.form.wanswer.length=1;
+                    this.form.wanswer[0].value="";
+                    this.form.answer="";
+                    this.form.questionname="";
+                    this.form.questioncontext="";
+                    this.dialogFormVisible = false
+                    this.back();
+
+                         })
+             }
+   
+           }
+           else{
+             this.$message.error('请输入正确答案内容');
+           }
+         }
+         if(this.form.option=="3")
+         {
+             this.postRequest('/api/question/addquestion',this.form ).then(resp=>{            
+                       this.form.questioncontext="";
+                         this.form.questionname="";
+
+                    this.dialogFormVisible = false
+                    this.back();
+                         })
+         }
+         if(this.form.option=="2")
+         {
+                      
+                        for(let i=0; i<this.form.ranswer.length;i++ )
+              {
+                submit2=true;
+                if(this.form.ranswer[i].value.replace(/(^s*)|(s*$)/g, "").length ==0)
+                {
+                  this.$message.error('请输入所有正确答案内容');
+                  submit2=false;
+                  this.form.ranswervalue.length=0;
+                  break;
+                }
+                this.form.ranswervalue.push(this.form.ranswer[i].value);
+                
+                
+              }
+               for(let i=0; i<this.form.wanswer.length;i++ )
+              {
+                submit3=true;
+                if(this.form.wanswer[i].value.replace(/(^s*)|(s*$)/g, "").length ==0)
+                {
+                  this.$message.error('请输入所有错误答案内容');
+                  submit3=false;
+                  this.form.wanswervalue.length=0;
+                  break;
+                }
+                this.form.wanswervalue.push(this.form.wanswer[i].value);
+              }
+                if(submit2==true&&submit3==true){
+               
+              this.postRequest('/api/question/addquestion',this.form ).then(resp=>{            
+                    this.form.wanswervalue.length=0;
+                    this.form.ranswervalue.length=0;
+                    this.form.wanswer.length=1;
+                    this.form.wanswer[0].value="";
+                    this.form.ranswer.length=1;
+                    this.form.ranswer[0].value="";
+                    this.form.questioncontext="";
+                    this.form.questionname="";
+                    this.dialogFormVisible = false
+                    this.back();
+                         })
+             }
+
+         }
+
+       },
+
+      next() { if(this.form.questionname.replace(/(^s*)|(s*$)/g, "").length !=0){
+        if(this.form.option=="1")
+        {
+          this.dx=true;
+        }
+        else if(this.form.option=="3")
+        {
+          this.pd=true;
+        }
+         else if(this.form.option=="2")
+        {
+          this.ddx=true;
+        }
+        this.active++
+        this.active1=true
+        this.active2=false
+      }
+        else{
+                  this.$message.error('请输入问题名称');
+        }
+
+      },
+       back() {
+        this.active--
+         this.active1=false
+        this.active2=true
+        this.dx=false
+        this.pd=false
+        this.ddx=false
+      },
+        removeDomain(item) {
+        var index = this.form.wanswer.indexOf(item)
+
+        if (index >=-1 && this.worry>1) {
+          this.form.wanswer.splice(index, 1)
+          this.worry--;
+        }
+        else
+        {
+          this.$message.error('不能删除全部错误选项');      
+        }
+      },
+      removeDomain2(item) {
+        var index = this.form.ranswer.indexOf(item)
+
+        if (index >=-1 && this.right>1) {
+          this.form.ranswer.splice(index, 1)
+          this.right--;
+        }
+        else
+        {
+          this.$message.error('不能删除全部正确选项');      
+        }
+      },
+       removeDomain2(item) {
+        var index = this.form.ranswer.indexOf(item)
+
+        if (index >=-1 && this.right>1) {
+          this.form.ranswer.splice(index, 1)
+          this.right--;
+        }
+        else
+        {
+          this.$message.error('不能删除全部错误选项');      
+        }
+      },
+      addDomain() {
+        this.form.wanswer.push({
+          value: '',
+          key: Date.now()
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        this.worry++;
+      },
+
+      addDomain2() {
+        this.form.ranswer.push({
+          value: '',
+          key: Date.now()
         })
-    },
-    // 关闭编辑、增加弹出框
-    closeDialog() {
-      this.editFormVisible = false
+        this.right++;
+      },
+     
+      
     }
-  }
-}
+  };
+   
 </script>
 
 <style scoped>
-.user-search {
-  margin-top: 20px;
-}
-.userRole {
-  width: 100%;
-}
+
 </style>
 
  
