@@ -7,8 +7,12 @@
       <el-breadcrumb-item>问题管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- Form -->
-<el-button type="text" @click="dialogFormVisible = true" >打开嵌套表单的 Dialog</el-button>
+    <div style="float:right">
+  <el-button type="success" @click="dialogFormVisible = true" plain>添加问题</el-button>
+  <el-button type="danger" @click="del()" plain>删除问题</el-button>
 
+    </div>
+    
 <el-dialog title="添加问题" :visible.sync="dialogFormVisible">
  <el-steps :active="active" finish-status="success">
   <el-step title="步骤 1"></el-step>
@@ -113,64 +117,91 @@
 <div>
   <el-table
     ref="multipleTable"
-    :data="tableData"
+    :data="tabledata"
     tooltip-effect="dark"
     style="width: 100%"
-    @selection-change="handleSelectionChange">
+    @selection-change="handleSelectionChange"
+    >
     <el-table-column
       type="selection"
-      width="55">
+      width="55"
+      align="center">
     </el-table-column>
-    <el-table-column
+
+  <el-table-column
+      prop="questionName"
       label="问题名称"
-      width="120">
-      <template slot-scope="scope">{{ scope.row.date }}</template>
+      width="200"
+      align="center">
     </el-table-column>
-    <el-table-column
-      prop="name"
-      label="问题分数"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
+   
+<el-table-column
+      prop="questionLevelId"
       label="问题难度"
-      show-overflow-tooltip>
+      width="120"
+      align="center">
     </el-table-column>
      <el-table-column
-      prop="address"
+      prop="questionTypeId"
       label="问题类型"
-      show-overflow-tooltip>
+      width="120"
+      align="center">
     </el-table-column>
-     <el-table-column
-      prop="address"
-      label="问题内容"
-      show-overflow-tooltip>
+  <el-table-column
+      prop="questionDescription"
+      label="问题简介"
+      width="600"
+      align="center"
+      :show-overflow-tooltip="true">
     </el-table-column>
-       <el-table-column
-      prop="address"
+        <el-table-column
+      fixed="right"
       label="操作"
-      show-overflow-tooltip>
+      width="100"
+      align="center">
+      <template slot-scope="scope">
+        <el-button @click="selectquestion(scope.$index, scope.row)" type="text" size="small">查看</el-button>
+        <el-button @click="selectquestion(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
+      </template>
+     
     </el-table-column>
+
+
   </el-table>
+
 </div>
 
+<div>
+          <question-dialog :questionVisible.sync="questionVisible"
+          :questiondetail="questiondetail"
+         ></question-dialog>
 
+</div>
   </div>
 </template>
 
 <script>
 import Pagination from '../../components/Pagination';
 import  { getCookie }from '../../utils/util.js';
+import questiondialog from'./Questiondialog.vue'
+
  export default {
+   components:{
+  'question-dialog':questiondialog
+   },
     data() {
       return {
+        questiondetail:[],
+        questionVisible:false,
         active: 0,
         active1:false,
         active2:true,
         dx:false,
         pd:false,
         ddx:false,
-        
+    tabledata:[{
+
+    }],
         worry:1,
         right:1,
         dialogFormVisible: false,
@@ -194,12 +225,21 @@ import  { getCookie }from '../../utils/util.js';
           option:"1",
           pdanswer:null,
           answer:null,
+          multipleSelection: []
+      
         }
        
       };
+     
+    },
+    mounted(){
+      this.getRequest("/api/question/selectallquestion").then(resp=>{
+          this.tabledata=resp.obj;
+      });
 
     },
      methods: {
+       
        submitFrom()
        {
           const user=JSON.parse(getCookie('user'));
@@ -298,11 +338,13 @@ import  { getCookie }from '../../utils/util.js';
                     this.form.questionname="";
                     this.dialogFormVisible = false
                     this.back();
+                    
                          })
              }
+            
 
          }
-
+        location.reload();
        },
 
       next() { if(this.form.questionname.replace(/(^s*)|(s*$)/g, "").length !=0){
@@ -386,7 +428,50 @@ import  { getCookie }from '../../utils/util.js';
         })
         this.right++;
       },
+          toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+     del(){
+
+
+          this.$confirm('此操作将永久删除问题, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.postRequest('/api/question/deletequestion',this.multipleSelection ).then(resp=>{                           
+                      location.reload();  
+                         })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+
+  
+                         },
      
+     selectquestion(index, row){
+        
+        
+        this.questiondetail=(index,row);
+        this.questionVisible=true;
+      //   this.postRequest('/api/question/selectquestionoption',(index,row)).then(resp=>{
+      //  console.log(resp);
+
+      //   })
+        
+       }
       
     }
   };
