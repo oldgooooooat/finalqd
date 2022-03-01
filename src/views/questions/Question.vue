@@ -8,6 +8,7 @@
     </el-breadcrumb>
     <!-- Form -->
     <div style="float:right">
+   <el-button type="success" @click="questioncategoryVisible = true" plain>科目管理</el-button>
   <el-button type="success" @click="dialogFormVisible = true" plain>添加问题</el-button>
   <el-button type="danger" @click="del()" plain>删除问题</el-button>
 
@@ -26,7 +27,7 @@
   <el-form-item v-show="active2" label="问题描述">
     <el-input v-model="form.questioncontext"></el-input>
   </el-form-item>
-  <el-form-item v-show="active2" label="问题分数" prop="questionscore"style="width:230px">
+  <el-form-item v-show="active2" label="问题分数" prop="score" style="width:230px">
     <el-input v-model="form.score"></el-input>
   </el-form-item>
   <el-form-item v-show="active2" label="问题难度">
@@ -36,6 +37,7 @@
       <el-option label="难" value="3"></el-option>
     </el-select>
 
+
   </el-form-item>
   <el-form-item v-show="active2" label="问题类型">
     <el-select v-model="form.option" placeholder="请选择问题类型">
@@ -43,6 +45,18 @@
       <el-option label="多选题" value="2"></el-option>
       <el-option label="判断题" value="3"></el-option>
     </el-select>
+     </el-form-item>
+
+      <el-form-item v-show="active2" label="问题类型">
+
+     <el-select v-show="active2" v-model="form.category" placeholder="请选择">
+    <el-option
+      v-for="item in category"
+      :key="item.value"
+      :label="item.questionCategoryName"
+      :value="item.questionCategoryId">
+    </el-option>
+      </el-select>
     
   </el-form-item>
 
@@ -137,6 +151,12 @@
       width="200"
       align="center">
     </el-table-column>
+    <el-table-column
+      prop="questionScore"
+      label="问题分数"
+      width="120"
+      align="center">
+    </el-table-column>
    
 <el-table-column
       prop="questionLevelId"
@@ -155,7 +175,7 @@
   <el-table-column
       prop="questionDescription"
       label="问题简介"
-      width="800"
+      width="660"
       align="center"
       :show-overflow-tooltip="true">
     </el-table-column>
@@ -181,10 +201,16 @@
           v-if="questionVisible"
           :questiondetail="questiondetail"
           :questiondisplay="questiondisplay"
-     
          ></question-dialog>
 
+
 </div>
+  <div>
+         <question-category :questioncategoryVisible.sync="questioncategoryVisible"
+          v-if="questioncategoryVisible"
+          >
+         </question-category>
+  </div>
   </div>
 </template>
 
@@ -192,12 +218,14 @@
 import Pagination from '../../components/Pagination';
 import  { getCookie }from '../../utils/util.js';
 import questiondialog from'./Questiondialog.vue'
+import questioncategory from './Questioncategory.vue'
  export const type={'1':'单选题','2':'多选题','3':'判断题'}
   export const difficult={'1':'易','2':'中','3':'难'}
 
  export default {
    components:{
-  'question-dialog':questiondialog
+  'question-dialog':questiondialog,
+  'question-category':questioncategory
    },
     data() {
       return {
@@ -205,6 +233,7 @@ import questiondialog from'./Questiondialog.vue'
         questionoptiondetail:[],
         questiondetail:[],
         questionVisible:false,
+        questioncategoryVisible:false,
         active: 0,
         active1:false,
         active2:true,
@@ -214,15 +243,17 @@ import questiondialog from'./Questiondialog.vue'
     tabledata:[{
 
     }],
+        category:[],
         worry:1,
         right:1,
         dialogFormVisible: false,
          formLabelWidth: '120px',
         rules: {
         questionname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
-        questionscore: [{ required: true, message: '请输入分数', trigger: 'blur' }]
+        score: [{ required: true, message: '请输入分数', trigger: 'blur' }]
       },
         form: {
+          category:"",
           score:"",
           userid:"",
           wanswer: [{
@@ -250,7 +281,9 @@ import questiondialog from'./Questiondialog.vue'
       this.getRequest("/api/question/selectallquestion").then(resp=>{
           this.tabledata=resp.obj;
       });
-
+      this.getRequest("/api/question/getcategory").then(resp=>{
+          this.category=resp.obj;
+      });
     },
      methods: {
        
