@@ -26,6 +26,9 @@
   <el-form-item v-show="active2" label="问题描述">
     <el-input v-model="form.questioncontext"></el-input>
   </el-form-item>
+  <el-form-item v-show="active2" label="问题分数" prop="questionscore"style="width:230px">
+    <el-input v-model="form.score"></el-input>
+  </el-form-item>
   <el-form-item v-show="active2" label="问题难度">
     <el-select v-model="form.difficulty" placeholder="请选择问题难度">
       <el-option label="易" value="1"></el-option>
@@ -139,18 +142,20 @@
       prop="questionLevelId"
       label="问题难度"
       width="120"
-      align="center">
+      align="center"
+      :formatter="getdiffcult">
     </el-table-column>
      <el-table-column
       prop="questionTypeId"
       label="问题类型"
       width="120"
-      align="center">
+      align="center"
+      :formatter="gettype">
     </el-table-column>
   <el-table-column
       prop="questionDescription"
       label="问题简介"
-      width="600"
+      width="800"
       align="center"
       :show-overflow-tooltip="true">
     </el-table-column>
@@ -160,8 +165,8 @@
       width="100"
       align="center">
       <template slot-scope="scope">
-        <el-button @click="selectquestion(scope.$index, scope.row)" type="text" size="small">查看</el-button>
-        <el-button @click="selectquestion(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
+        <el-button @click="selectquestion2(scope.$index, scope.row)" type="text" size="small">查看</el-button>
+        <el-button @click="selectquestion1(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
       </template>
      
     </el-table-column>
@@ -173,7 +178,10 @@
 
 <div>
           <question-dialog :questionVisible.sync="questionVisible"
+          v-if="questionVisible"
           :questiondetail="questiondetail"
+          :questiondisplay="questiondisplay"
+     
          ></question-dialog>
 
 </div>
@@ -184,6 +192,8 @@
 import Pagination from '../../components/Pagination';
 import  { getCookie }from '../../utils/util.js';
 import questiondialog from'./Questiondialog.vue'
+ export const type={'1':'单选题','2':'多选题','3':'判断题'}
+  export const difficult={'1':'易','2':'中','3':'难'}
 
  export default {
    components:{
@@ -191,6 +201,8 @@ import questiondialog from'./Questiondialog.vue'
    },
     data() {
       return {
+        questiondisplay:true,
+        questionoptiondetail:[],
         questiondetail:[],
         questionVisible:false,
         active: 0,
@@ -207,9 +219,11 @@ import questiondialog from'./Questiondialog.vue'
         dialogFormVisible: false,
          formLabelWidth: '120px',
         rules: {
-        questionname: [{ required: true, message: '请输入账号', trigger: 'blur' }]
+        questionname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+        questionscore: [{ required: true, message: '请输入分数', trigger: 'blur' }]
       },
         form: {
+          score:"",
           userid:"",
           wanswer: [{
             value: ''
@@ -457,20 +471,22 @@ import questiondialog from'./Questiondialog.vue'
             message: '已取消删除'
           });          
         });
-
-  
                          },
-     
-     selectquestion(index, row){
-        
-        
+     gettype(row,column,cellValue){
+          return type[cellValue]
+     },
+     getdiffcult(row,column,cellValue){
+          return difficult[cellValue]
+     },
+     selectquestion1(index, row){
+        this.questiondisplay=false
         this.questiondetail=(index,row);
         this.questionVisible=true;
-      //   this.postRequest('/api/question/selectquestionoption',(index,row)).then(resp=>{
-      //  console.log(resp);
-
-      //   })
-        
+       },
+        selectquestion2(index, row){
+        this.questiondisplay=true;
+        this.questiondetail=(index,row);
+        this.questionVisible=true;
        }
       
     }

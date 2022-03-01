@@ -71,7 +71,7 @@ this.postKeyValueRequest('/api/doLogin',this.ruleForm).then(resp=>{
             const user=JSON.stringify(resp.obj);
                setCookie('user', user, 7)
             this.$store.commit('login', 'true')
-            this.$router.push({ path: '/goods/Goods' })
+            this.$router.push({ path: '/questions/Question' })
           }, 1000)
             }
            
