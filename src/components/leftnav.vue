@@ -48,7 +48,7 @@ export default {
               icon: 'icon-cat-skuQuery',
               menuname: '问题管理',
               hasThird: 'N',
-              url: 'goods/Goods',
+              url: 'questions/Question',
               menus: null
             }
           ]
