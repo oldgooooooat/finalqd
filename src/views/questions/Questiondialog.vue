@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-24 09:06:23
- * @LastEditTime: 2022-02-26 15:22:51
+ * @LastEditTime: 2022-03-02 10:34:22
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\views\goods\Questiondialog.vue
@@ -23,6 +23,7 @@
   v-model="form.questiondetail1.questionDescription"
   :disabled="questiondisplay">
  </el-input>
+
         <el-tag>问题类型</el-tag>
         <div>
     <el-select v-model="form.questiondetail1.questionTypeId"  :disabled="true" >
@@ -30,6 +31,19 @@
       <el-option label="多选题" :value="2"></el-option>
       <el-option label="判断题" :value="3"></el-option>
     </el-select>
+    
+      </div>
+    
+          <el-tag>问题科目</el-tag>
+             <div>
+    <el-select  v-model="form.questiondetail1.questionCategoryid" :disabled="questiondisplay" >
+    <el-option
+      v-for="item in category"
+      :key="item.value"
+      :label="item.questionCategoryName"
+      :value="item.questionCategoryId">
+    </el-option>
+      </el-select>
       </div>
          <el-tag>问题难度</el-tag>
       <div>
@@ -39,6 +53,7 @@
       <el-option label="难" :value="3"></el-option>
     </el-select>
       </div>
+     
 <div v-if="questiondetail.questionTypeId!=3">
 <div v-for="(item,i) in form.rquestionoption" >
    <el-tag>正确答案{{i+1}}</el-tag>
@@ -87,13 +102,12 @@
        mounted(){
           // this.$set(this.questiondetail1,'questionTypeId',this.questiondetail.questionTypeId)
           // this.$set(this.questiondetail1,'questionLevelId',this.questiondetail.questionLevelId)
-
-        this.postRequest('/api/question/selectquestionoption',this.questiondetail).then(resp=>{
+     this.postRequest('/api/question/selectquestionoption',this.questiondetail).then(resp=>{
         this.form.questionoptiondetail1=resp.obj
-        
+         console.log(this.form.questiondetail1)
         this.split()
-        console.log(this.form)
       })
+      
 
        },
        data(){
@@ -120,7 +134,8 @@
                 // require: true // 必填
             },
             questiondetail:[],
-            questionoptiondetail:[]
+            questionoptiondetail:[],
+            category:[]
         },
       
         methods:{
@@ -140,7 +155,7 @@
           type: 'warning'
         }).then(() => {
           this.postRequest('/api/question/changequestion',this.form ).then(resp=>{                           
-                      // location.reload();  
+                     location.reload();  
                 this.$emit('update:questionVisible',false);
 
                          })

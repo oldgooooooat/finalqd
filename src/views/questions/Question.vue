@@ -47,9 +47,9 @@
     </el-select>
      </el-form-item>
 
-      <el-form-item v-show="active2" label="问题类型">
+      <el-form-item v-show="active2" label="问题科目" prop="score">
 
-     <el-select v-show="active2" v-model="form.category" placeholder="请选择">
+     <el-select v-show="active2" v-model="form.category" placeholder="请选择" >
     <el-option
       v-for="item in category"
       :key="item.value"
@@ -152,6 +152,12 @@
       align="center">
     </el-table-column>
     <el-table-column
+      prop="questionCategoryName"
+      label="问题科目"
+      width="120"
+      align="center">
+    </el-table-column>
+    <el-table-column
       prop="questionScore"
       label="问题分数"
       width="120"
@@ -175,7 +181,7 @@
   <el-table-column
       prop="questionDescription"
       label="问题简介"
-      width="660"
+      width="540"
       align="center"
       :show-overflow-tooltip="true">
     </el-table-column>
@@ -201,6 +207,7 @@
           v-if="questionVisible"
           :questiondetail="questiondetail"
           :questiondisplay="questiondisplay"
+          :category="category"
          ></question-dialog>
 
 
@@ -279,7 +286,9 @@ import questioncategory from './Questioncategory.vue'
     },
     mounted(){
       this.getRequest("/api/question/selectallquestion").then(resp=>{
+        
           this.tabledata=resp.obj;
+          console.log(this.tabledata)
       });
       this.getRequest("/api/question/getcategory").then(resp=>{
           this.category=resp.obj;
@@ -394,7 +403,11 @@ import questioncategory from './Questioncategory.vue'
         location.reload();
        },
 
-      next() { if(this.form.questionname.replace(/(^s*)|(s*$)/g, "").length !=0){
+      next() { if(this.form.questionname.replace(/(^s*)|(s*$)/g, "").length !=0 &&
+                  this.form.score.replace(/(^s*)|(s*$)/g, "").length !=0 &&
+                  this.form.category.length !=0
+                  
+                  ){
         if(this.form.option=="1")
         {
           this.dx=true;
@@ -412,7 +425,7 @@ import questioncategory from './Questioncategory.vue'
         this.active2=false
       }
         else{
-                  this.$message.error('请输入问题名称');
+                  this.$message.error('请输入带*的项目');
         }
 
       },
