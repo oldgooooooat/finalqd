@@ -53,6 +53,24 @@ export default {
             }
           ]
         },
+        { menuid:3,
+          
+          icon: 'li-icon-xiangmuguanli',
+          menuname: '答题',
+          hasThird: null,
+          url: null,
+          menus:[
+              {
+              menuid: 2,
+              icon: 'icon-cat-skuQuery',
+              menuname: '自由回答',
+              hasThird: 'N',
+              url: 'answer/Answer',
+              menus: null
+            }
+          ]
+
+        }
         
        
        
