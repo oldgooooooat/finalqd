@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-02 13:14:23
- * @LastEditTime: 2022-03-03 15:14:55
+ * @LastEditTime: 2022-03-04 15:07:30
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\answer.vue
@@ -25,20 +25,25 @@
     </el-option>
       </el-select>
   <el-button type="primary" plain @click="choosequestion(1)">单选题</el-button>
-  <el-button type="primary" plain>主要按钮</el-button>
-  <el-button type="primary" plain>主要按钮</el-button>
+  <el-button type="primary" plain @click="choosequestion(2)">多选题</el-button>
+  <el-button type="primary" plain @click="choosequestion(3)">判断题</el-button>
 
 </div>
 
 <div class="text" v-show="display">
-      <!-- <h1>请点击右上角按钮开始答题</h1> -->
+    <h1>请选择科目然后点击右上角按钮开始答题</h1> 
 
 </div>
 <div class="text">
    <h1>{{this.questiondeteil.questionDescription}}</h1>
-</div>
-<div  class="options" v-if="this.form.questiontype!=3">
-  <el-radio-group
+   <viewer  v-show="next" v-if="this.questiondeteil.questionPhotos!='' "  :images="photos"
+   >
+         <img style="width: 150px;height: 150px; cursor:pointer" :src="this.questiondeteil.questionPhotos" :key="this.questiondeteil.questionPhotos">
+   </viewer>
+
+
+
+  <el-radio-group v-if="this.form.questiontype!=2"
        v-model="chooseoptions"
    
       >
@@ -53,6 +58,19 @@
               ></el-radio>
               </div>
        </el-radio-group>
+       
+         <el-checkbox-group v-model="chooseoptions1" v-if="this.form.questiontype==2"  > 
+       <div       v-for="(item, index) in options"
+         :key="index"
+         style="margin-top:30px"
+         
+          >
+      
+              <el-checkbox :label="optionname[index]+'     '+item.questionOptionContent"
+                           :value="item.questionOptionId"
+              ></el-checkbox>
+              </div>
+         </el-checkbox-group>
        <hr />
        <div >
                <h1>正确答案</h1>
@@ -77,8 +95,13 @@
 </div>
 </div>
 
-
+<div  class="next" v-show="next">
+　　  <el-button type="primary" @click="nextquestion()">下一题</el-button>
 </div>
+</div>
+
+
+
 </template>
 
 <script>
@@ -90,11 +113,14 @@ export default {
    },
    data(){
        return{
+         photos:[],
           answerdisplay:false,
+          next:false,
           display:true,
           optionname:["A","B","C","D","E","F","G","H","I","J","K"],
            category:[],
            chooseoptions:'',
+           chooseoptions1:[],
            form:{
                category:'',
                questiontype:''
@@ -108,27 +134,65 @@ export default {
     chooseoptions(value)
     {
       this.answerdisplay=true;      
-    }
+    },
+    chooseoptions1(value)
+    {
+      this.answerdisplay=true;      
+    },
+
  } ,
    methods:{
      
-       choosequestion(index)
-       {     
-         if(this.form.category!='')
+       nextquestion(){
+            if(this.form.category!='')
          {
-         this.form.questiontype=index; 
-
+        //    var changetype=this.form.questiontype;
+        //  this.form.questiontype=index; 
          this.postRequest('/api/answer/randomquestion',this.form).then(resp=>{   
            if(resp!=null)
            {
+                          this.photos.push(resp.obj[1].questionPhotos);
            this.options=resp.obj[1];
             this.questiondeteil=resp.obj[0];
             this.answeroptions=resp.obj[2];
             this.answerdisplay=false
+            this.next=true
+            
             console.log(this.answeroptions)
            }
            else{
+             
              this.$message.error('该科目没有此类问题');
+             this.form.questiontype=changetype;
+           }
+       });
+         }
+       }
+       ,
+
+       choosequestion(index)
+       {     
+         console.log(this.photos)
+         if(this.form.category!='')
+         {
+           this.display=false
+           var changetype=this.form.questiontype;
+         this.form.questiontype=index; 
+         this.postRequest('/api/answer/randomquestion',this.form).then(resp=>{   
+           if(resp!=null)
+           {
+             this.photos.push(resp.obj[1].questionPhotos);
+           this.options=resp.obj[1];
+            this.questiondeteil=resp.obj[0];
+            this.answeroptions=resp.obj[2];
+            this.answerdisplay=false
+            this.next=true
+            
+           }
+           else{
+             
+             this.$message.error('该科目没有此类问题');
+             this.form.questiontype=changetype;
            }
        });
          }
@@ -146,26 +210,22 @@ export default {
 .text {
   width: 100%;
      height: 200px;
-    position: absolute;
+    position: fixed;
     left: 20%;
     top: 25%;
          margin: -50px 0 0 -50px;
 }
-.options {
-  width: 100%;
-     height: 200px;
-    position: absolute;
-    left: 20%;
-    top: 40%;
-         margin: -50px 0 0 -50px;
+.next {
+ position:fixed	
+;
+ right:10px;
+ bottom:0px;
+ width:100px;
+ border:10px;
+
 }
-.answeroptions {
-  width: 100%;
-     height: 200px;
-    position: absolute;
-    left: 20%;
-    top: 70%;
-         margin: -50px 0 0 -50px;
-}
+
+
+
 
 </style>

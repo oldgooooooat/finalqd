@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-24 09:06:23
- * @LastEditTime: 2022-03-02 10:34:22
+ * @LastEditTime: 2022-03-05 13:59:02
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\views\goods\Questiondialog.vue
@@ -23,6 +23,13 @@
   v-model="form.questiondetail1.questionDescription"
   :disabled="questiondisplay">
  </el-input>
+ <el-tag>问题图片</el-tag>
+<el-input
+  v-model="form.questiondetail1.questionPhotos"
+  :disabled="questiondisplay">
+ </el-input>
+     <el-image v-if="form.questiondetail1.questionPhotos!='' "   :src="form.questiondetail1.questionPhotos"></el-image>
+
 
         <el-tag>问题类型</el-tag>
         <div>
@@ -79,8 +86,8 @@
   <el-tag>正确答案</el-tag>
   <div>
   <el-select v-model="item.questionOptionContent" :disabled="questiondisplay" >
-      <el-option label="对" value="1"></el-option>
-      <el-option label="错" value="2"></el-option>
+      <el-option label="对" value="对"></el-option>
+      <el-option label="错" value="错"></el-option>
 
     </el-select>
   </div>
@@ -104,8 +111,8 @@
           // this.$set(this.questiondetail1,'questionLevelId',this.questiondetail.questionLevelId)
      this.postRequest('/api/question/selectquestionoption',this.questiondetail).then(resp=>{
         this.form.questionoptiondetail1=resp.obj
-         console.log(this.form.questiondetail1)
         this.split()
+        
       })
       
 
@@ -154,6 +161,17 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          if(this.form.questiondetail1.questionTypeId=="3")
+          {
+            if(this.form.rquestionoption[0].questionOptionContent=="对")
+            {
+              this.form.questionoptiondetail1[0].questionOptionContent="错"
+            }
+            else
+            {
+              this.form.questionoptiondetail1[0].questionOptionContent="对"
+            }
+          }
           this.postRequest('/api/question/changequestion',this.form ).then(resp=>{                           
                      location.reload();  
                 this.$emit('update:questionVisible',false);

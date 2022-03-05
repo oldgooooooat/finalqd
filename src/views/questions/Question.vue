@@ -27,6 +27,9 @@
   <el-form-item v-show="active2" label="问题描述">
     <el-input v-model="form.questioncontext"></el-input>
   </el-form-item>
+   <el-form-item v-show="active2" label="问题图片">
+    <el-input v-model="form.photos"></el-input>
+  </el-form-item>
   <el-form-item v-show="active2" label="问题分数" prop="score" style="width:230px">
     <el-input v-model="form.score"></el-input>
   </el-form-item>
@@ -69,8 +72,8 @@
   <el-form-item v-show="pd" label="正确答案" >
   
    <el-select   v-model="form.answer" placeholder="请选择正确答案">
-      <el-option label="对" value="1"></el-option>
-      <el-option label="错" value="2"></el-option>
+      <el-option label="对" value="对"></el-option>
+      <el-option label="错" value="错"></el-option>
     </el-select>
   </el-form-item>
 
@@ -260,6 +263,7 @@ import questioncategory from './Questioncategory.vue'
         score: [{ required: true, message: '请输入分数', trigger: 'blur' }]
       },
         form: {
+          photos:"",
           category:"",
           score:"",
           userid:"",
@@ -344,6 +348,13 @@ import questioncategory from './Questioncategory.vue'
          }
          if(this.form.option=="3")
          {
+            if(this.form.answer=="对"){
+              this.form.pdanswer="错";
+            }
+            else{
+              this.form.pdanswer="对";
+            }
+            
              this.postRequest('/api/question/addquestion',this.form ).then(resp=>{            
                        this.form.questioncontext="";
                          this.form.questionname="";
