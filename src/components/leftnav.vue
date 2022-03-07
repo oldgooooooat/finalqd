@@ -70,6 +70,24 @@ export default {
             }
           ]
 
+        },
+        { menuid:4,
+          
+          icon: 'li-icon-xiangmuguanli',
+          menuname: '考试管理',
+          hasThird: null,
+          url: null,
+          menus:[
+              {
+              menuid: 5,
+              icon: 'icon-cat-skuQuery',
+              menuname: '考试管理',
+              hasThird: 'N',
+              url: 'exam/Exam',
+              menus: null
+            }
+          ]
+
         }
         
        
