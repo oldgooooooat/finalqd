@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-03-04 14:52:47
+ * @LastEditTime: 2022-03-11 10:17:52
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\main.js
@@ -41,6 +41,9 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
+//日期格式化
+import moment from 'moment'//导入文件
+Vue.prototype.$moment = moment;//赋值使用
 //图片预览
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'

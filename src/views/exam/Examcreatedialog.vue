@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-03-07 15:24:13
+ * @LastEditTime: 2022-03-09 14:10:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
@@ -29,7 +29,7 @@
     <el-input v-model="Form.context"></el-input>
   </el-form-item>
    <el-form-item label="考试时间" prop="time" style="width:200px" v-show="activedisplay">
-    <el-input v-model="Form.time"></el-input>
+    <el-input v-model="Form.time" type="number"></el-input>
   </el-form-item>
 
      <el-form-item label="有效时间"  v-show="activedisplay" >
@@ -38,7 +38,8 @@
       type="datetimerange"
       range-separator="至"
       start-placeholder="开始日期"
-      end-placeholder="结束日期">
+      end-placeholder="结束日期"
+      value-format="timestamp">
     </el-date-picker>
   
   </el-form-item>
@@ -61,7 +62,7 @@
     <el-button @click="close()">取 消</el-button>
     <el-button v-show="actived1isplay"type="primary" @click="back">上一步</el-button>
     <el-button v-show="activedisplay" type="primary" @click="next">下一步</el-button>
-     <el-button v-show="actived1isplay"type="primary" @click="submitFrom()">提交</el-button>
+     <el-button v-show="actived1isplay"type="primary" @click="submit()">提交</el-button>
 
   </div>
   
@@ -74,15 +75,16 @@
 export default {
     mounted(){
         console.log(111);
+        this.question=this.questionlist;
     },
 data(){
      const generateData = _ => {
         const data = [];
-        for (let i = 1; i <= 15; i++) {
+        for (let i = 1; i <= this.questionlist.length; i++) {
           data.push({
-            key: i,
-            label: `备选项 ${ i }`,
-            disabled: i % 4 === 0
+            key: this.questionlist[i-1].questionId,
+            label: `${ this.questionlist[i-1].questionName}（${this.questionlist[i-1].questionCategoryName}）`,
+            
           });
         }
         return data;
@@ -94,6 +96,7 @@ data(){
                 activedisplay:true,
                 actived1isplay:false,
             data:generateData(),
+        
         Form: {
           name: '',
           context:'',
@@ -127,11 +130,39 @@ data(){
           this.actived1isplay=false;
          },
          next(){
+           if(this.Form.name.replace(/(^s*)|(s*$)/g, "").length !=0 &&
+                  this.Form.context.replace(/(^s*)|(s*$)/g, "").length !=0 &&
+                 this.Form.time.replace(/(^s*)|(s*$)/g, "").length !=0 &&
+                  this.Form.examtime.length!=0
+                  
+                  ){
+           console.log(this.questionlist)
            this.active++;
            this.activedisplay=false;
            this.actived1isplay=true;
+                  }
+                  else
+                  {
+                    this.$message.error('请输入所有项目');
+                  }
+         },
+         submit(){
+this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
+        this.active--
+        this.activedisplay=true;
+        this.actived1isplay=false;
+        this.Form.name='';
+        this.Form.context='';
+        this.Form.time='';
+        this.Form.examtime='';
+        this.Form.answer=[];
+                        
+         
+      })
+      this.$emit('update:examcreatedisplay',false);
          },
             close(){
+              
                 console.log(this.Form);
                       //  this.postRequest('/api/question/changequestion',this.form).then(resp=>{
                       //    console.log("111")
@@ -141,7 +172,7 @@ data(){
             },
 },
  props: {
-
+            questionlist:[],
             examcreatedisplay: {
                 type: Boolean,
                 default: false

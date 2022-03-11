@@ -31,7 +31,7 @@
     <el-input v-model="form.photos"></el-input>
   </el-form-item>
   <el-form-item v-show="active2" label="问题分数" prop="score" style="width:230px">
-    <el-input v-model="form.score"></el-input>
+    <el-input v-model="form.score" type="number"></el-input>
   </el-form-item>
   <el-form-item v-show="active2" label="问题难度">
     <el-select v-model="form.difficulty" placeholder="请选择问题难度">
