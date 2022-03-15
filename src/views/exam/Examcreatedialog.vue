@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-03-09 14:10:37
+ * @LastEditTime: 2022-03-14 13:23:46
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
@@ -123,6 +123,7 @@ data(){
 
 
   methods:{
+
          back()
          {
           this.active--;
@@ -156,7 +157,7 @@ this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
         this.Form.time='';
         this.Form.examtime='';
         this.Form.answer=[];
-                        
+        location.reload();
          
       })
       this.$emit('update:examcreatedisplay',false);
@@ -167,7 +168,7 @@ this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
                       //  this.postRequest('/api/question/changequestion',this.form).then(resp=>{
                       //    console.log("111")
                       //    })
-
+                location.reload();
                 this.$emit('update:examcreatedisplay',false);
             },
 },

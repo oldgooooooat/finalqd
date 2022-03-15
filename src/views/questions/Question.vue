@@ -27,7 +27,7 @@
   <el-form-item v-show="active2" label="问题描述">
     <el-input v-model="form.questioncontext"></el-input>
   </el-form-item>
-   <el-form-item v-show="active2" label="问题图片">
+   <el-form-item v-show="active2" label="问题图片（url）">
     <el-input v-model="form.photos"></el-input>
   </el-form-item>
   <el-form-item v-show="active2" label="问题分数" prop="score" style="width:230px">
