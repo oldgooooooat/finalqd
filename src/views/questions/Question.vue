@@ -154,6 +154,13 @@
       width="200"
       align="center">
     </el-table-column>
+     <el-table-column
+     v-if="this.userdetail.usertype==1"
+        prop="createname"
+        label="创造人"
+        width="100">
+    </el-table-column>
+    
     <el-table-column
       prop="questionCategoryName"
       label="问题科目"
@@ -184,7 +191,7 @@
   <el-table-column
       prop="questionDescription"
       label="问题简介"
-      width="540"
+      width="500"
       align="center"
       :show-overflow-tooltip="true">
     </el-table-column>
@@ -262,6 +269,10 @@ import questioncategory from './Questioncategory.vue'
         questionname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         score: [{ required: true, message: '请输入分数', trigger: 'blur' }]
       },
+      userdetail:{
+        usertype:'',
+        userid:''
+      },
         form: {
           photos:"",
           category:"",
@@ -289,7 +300,11 @@ import questioncategory from './Questioncategory.vue'
      
     },
     mounted(){
-      this.getRequest("/api/question/selectallquestion").then(resp=>{
+      const user=JSON.parse(getCookie('user'));
+
+      this.userdetail.userid=user.id
+      this.userdetail.usertype=user.type
+      this.postRequest("/api/question/selectallquestion",this.userdetail).then(resp=>{
         
           this.tabledata=resp.obj;
           console.log(this.tabledata)

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-03-14 10:29:22
+ * @LastEditTime: 2022-03-15 14:34:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -52,6 +52,12 @@
         width="180">
       </el-table-column>
       <el-table-column
+      v-if="this.userdetail.usertype==1"
+        prop="createname"
+        label="创造人"
+        width="180">
+      </el-table-column>
+      <el-table-column
         prop="examScore"
         label="考试总分"
         width="180">
@@ -87,6 +93,8 @@
 </template>
 
 <script>
+import  { getCookie }from '../../utils/util.js';
+
 import Examcreate from'./Examcreatedialog.vue'
 import Examdialog from'./Examdialog.vue'
 
@@ -96,13 +104,16 @@ export default {
   'Exam-dialog':Examdialog,
    },
    mounted(){
-     
- this.getRequest("/api/question/selectallquestion").then(resp=>{
+       const user=JSON.parse(getCookie('user'));
+
+      this.userdetail.userid=user.id
+      this.userdetail.usertype=user.type
+ this.postRequest("/api/question/selectallquestion",this.userdetail).then(resp=>{
       
           this.questionlist=resp.obj;
           
       });
- this.getRequest("/api/exam/getallexam").then(resp=>{
+ this.postRequest("/api/exam/getallexam",this.userdetail).then(resp=>{
      this.examlist=resp.obj;
      for(let i=0;i<this.examlist.length;i++)
      {
@@ -115,7 +126,10 @@ export default {
    },
    data(){
        return{
-           
+      userdetail:{
+        usertype:'',
+        userid:''
+      },
            examlist:[],
            examdialoglist:[],
            questionlist:[],
