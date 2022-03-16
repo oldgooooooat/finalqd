@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-03-14 13:23:46
+ * @LastEditTime: 2022-03-16 09:26:57
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
@@ -72,6 +72,8 @@
 </template>
 
 <script>
+import  { getCookie }from '../../utils/util.js';
+
 export default {
     mounted(){
         console.log(111);
@@ -103,6 +105,8 @@ data(){
           time:'',
           examtime:'',
           answer:[],
+          userid:'',
+          
         },
           rules: {
           name: [
@@ -148,6 +152,8 @@ data(){
                   }
          },
          submit(){
+        const user=JSON.parse(getCookie('user'));
+        this.Form.userid=user.id;
 this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
         this.active--
         this.activedisplay=true;

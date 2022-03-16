@@ -137,7 +137,7 @@
 <div>
   <el-table
     ref="multipleTable"
-    :data="tabledata"
+    :data="tabledata.slice((currentPage-1)*pagesize,currentPage*pagesize)"
     tooltip-effect="dark"
     style="width: 100%"
     @selection-change="handleSelectionChange"
@@ -209,7 +209,17 @@
 
 
   </el-table>
-
+<div>
+      <el-pagination  class="footer"
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage"
+                            :page-sizes="[5, 10, 20, 40]" 
+                            :page-size="pagesize"         
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="tabledata.length">    
+                    </el-pagination>
+</div>
 </div>
 
 <div>
@@ -246,6 +256,8 @@ import questioncategory from './Questioncategory.vue'
    },
     data() {
       return {
+              currentPage:1, //初始页
+               pagesize:10,    //    每页的数据
         questiondisplay:true,
         questionoptiondetail:[],
         questiondetail:[],
@@ -300,6 +312,7 @@ import questioncategory from './Questioncategory.vue'
      
     },
     mounted(){
+      
       const user=JSON.parse(getCookie('user'));
 
       this.userdetail.userid=user.id
@@ -314,7 +327,14 @@ import questioncategory from './Questioncategory.vue'
       });
     },
      methods: {
-       
+        handleSizeChange: function (size) {
+                this.pagesize = size;
+                console.log(this.pagesize)  //每页下拉显示数据
+        },
+        handleCurrentChange: function(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage)  //点击第几页
+        },
        submitFrom()
        {
           const user=JSON.parse(getCookie('user'));
@@ -568,6 +588,18 @@ import questioncategory from './Questioncategory.vue'
 
 <style scoped>
 
+.footer{
+
+height: 100px;
+
+width: 100%;
+
+text-align: center;
+position: fixed;
+
+bottom: 0;
+
+}
 </style>
 
  

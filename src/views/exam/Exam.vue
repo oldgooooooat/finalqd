@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-03-15 14:34:25
+ * @LastEditTime: 2022-03-16 15:19:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -35,10 +35,12 @@
         </div>
         <div>
            <el-table
+
               ref="multipleTable"
     tooltip-effect="dark"
     @selection-change="handleSelectionChange"
-      :data="examlist"
+      :data="examlist.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+ 
       style="width: 100%">
        <el-table-column
       type="selection"
@@ -63,6 +65,11 @@
         width="180">
       </el-table-column>
       <el-table-column
+        prop="examSwitch"
+        label="考试状态"
+        :formatter="getswitch">
+      </el-table-column>
+          <el-table-column
         prop="examTimeLimit"
         label="考试持续时间">
       </el-table-column>
@@ -80,13 +87,26 @@
       width="100"
       align="center">
       <template slot-scope="scope">
-        <el-button  type="text" @click="selectquestion1(scope.$index, scope.row)" size="small">查看</el-button>
-        <el-button type="text"  @click="selectquestion2(scope.$index, scope.row)"size="small">编辑</el-button>
+        <el-button  type="text"v-if="(scope.$index, scope.row).examSwitch!=1" @click="selectquestion1(scope.$index, scope.row)" size="small">查看</el-button>
+        <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==1" @click="selectquestion2(scope.$index, scope.row)"size="small">编辑</el-button>
+                <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==2" @click="closeexam(scope.$index, scope.row)"size="small">关闭</el-button>
+
       </template>
           </el-table-column>
 
     </el-table>
         </div>
+  <div>
+               <el-pagination  class="footer"
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage"
+                            :page-sizes="[1, 10, 20, 40]" 
+                            :page-size="pagesize"         
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="examlist.length">    
+                    </el-pagination>
+     </div>
   </div>
 
 
@@ -97,6 +117,7 @@ import  { getCookie }from '../../utils/util.js';
 
 import Examcreate from'./Examcreatedialog.vue'
 import Examdialog from'./Examdialog.vue'
+ export const examswitch={'1':'未开启','2':'持续中','3':'已结束'}
 
 export default {
    components:{
@@ -126,6 +147,9 @@ export default {
    },
    data(){
        return{
+
+            currentPage:1, //初始页
+               pagesize:10,    //    每页的数据
       userdetail:{
         usertype:'',
         userid:''
@@ -141,6 +165,18 @@ export default {
        }
    },
    methods:{
+           // 初始页currentPage、初始每页数据数pagesize和数据data
+        handleSizeChange: function (size) {
+                this.pagesize = size;
+                console.log(this.pagesize)  //每页下拉显示数据
+        },
+        handleCurrentChange: function(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage)  //点击第几页
+        },
+        getswitch(row,column,cellValue){
+          return examswitch[cellValue]
+     },
            handleSelectionChange(val) {
         this.multipleSelection = val;
       },
@@ -151,7 +187,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.postRequest('/api/exam/deleteexam',this.multipleSelection).then(resp=>{                           
-                      // location.reload();  
+                     location.reload();  
                          })
         }).catch(() => {
           this.$message({
@@ -172,6 +208,23 @@ export default {
         console.log((index,row));
         this.examdialoglist=(index,row);
        },
+       closeexam(index, row){
+        this.examdialoglist=(index,row);
+         this.$confirm('此操作将永久删除考试, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.postRequest('/api/exam/closeexam',this.examdialoglist).then(resp=>{                           
+                    location.reload(); 
+                         })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消关闭'
+          });          
+        });
+       },
  dateFormat:function(date){
         return this.$moment(date).format("YYYY-MM-DD HH:mm:ss")
       }
@@ -180,5 +233,16 @@ export default {
 </script>
 
 <style>
+.footer{
 
+height: 100px;
+
+width: 100%;
+
+text-align: center;
+position: fixed;
+
+bottom: 0;
+
+}
 </style>
