@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-03-07 09:24:30
+ * @LastEditTime: 2022-03-17 13:54:33
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\router\index.js
@@ -21,7 +21,8 @@ import regist from '@/views/regist'
 import questions from '@/views/questions/Question';
 import answer from '@/views/answer/Answer';
 import exam from '@/views/exam/Exam';
-
+import examanswer from '@/views/answer/examanswer'
+import examcontext from '@/views/answer/examcontext'
 // 启用路由
 Vue.use(Router);
 
@@ -82,7 +83,27 @@ export default new Router({
             requireAuth: true
         }
 
+        },
+        { 
+            path: '/answer/Examanswer',
+        name: '在线考试',
+        component: examanswer,
+        meta: {
+            requireAuth: true
         }
+
+        }
+        ,
+        { 
+            path: '/answer/Examcontext',
+        name: '考试页面',
+        component: examcontext,
+        meta: {
+            requireAuth: true
+        }
+
+        }
+    
     
     ]
     }]

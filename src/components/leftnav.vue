@@ -71,6 +71,24 @@ export default {
           ]
 
         },
+        { menuid:6,
+          
+          icon: 'li-icon-xiangmuguanli',
+          menuname: '在线考试',
+          hasThird: null,
+          url: null,
+          menus:[
+              {
+              menuid: 7,
+              icon: 'icon-cat-skuQuery',
+              menuname: '在线考试',
+              hasThird: 'N',
+              url: 'answer/Examanswer',
+              menus: null
+            }
+          ]
+
+        },
         { menuid:4,
           
           icon: 'li-icon-xiangmuguanli',

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-03-16 15:19:38
+ * @LastEditTime: 2022-03-18 09:13:47
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -101,7 +101,7 @@
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
                             :current-page="currentPage"
-                            :page-sizes="[1, 10, 20, 40]" 
+                            :page-sizes="[5, 10, 20, 40]" 
                             :page-size="pagesize"         
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="examlist.length">    
@@ -210,7 +210,7 @@ export default {
        },
        closeexam(index, row){
         this.examdialoglist=(index,row);
-         this.$confirm('此操作将永久删除考试, 是否继续?', '提示', {
+         this.$confirm('此操作将关闭考试, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
