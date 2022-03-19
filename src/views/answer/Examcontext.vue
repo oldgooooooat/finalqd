@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 13:43:16
- * @LastEditTime: 2022-03-18 17:08:12
+ * @LastEditTime: 2022-03-19 14:41:19
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examcontext.vue
@@ -67,12 +67,13 @@ v-on:end_callback="countDownE_cb()"
          </el-checkbox-group>
 
   </div>
-                    <el-button type="primary" plain @click="con">主要按钮</el-button>
+               <el-button type="success" round @click="submit">成功按钮</el-button>
 
 </div>
 </template>
 
 <script>
+import  { getCookie }from '../../utils/util.js';
 import CountDown from './count.vue'
 export default {
    components: {
@@ -80,6 +81,10 @@ export default {
 },
 
   mounted(){
+       const user=JSON.parse(getCookie('user'));
+
+      this.userdetail.userid=user.id
+      this.userdetail.usertype=user.type
    this.examlist=JSON.parse(sessionStorage.getItem('params'))
      this.postRequest('/api/answer/selectexamquestion',this.examlist).then(resp=>{   
         console.log(resp.obj);
@@ -101,22 +106,30 @@ export default {
   },
 data(){
     return{
-      checked:false,
-      dxanswer:'',
-      answer:[],
-              optionname:["A","B","C","D","E","F","G","H","I","J","K"],
+        params:{},
+        optionname:["A","B","C","D","E","F","G","H","I","J","K"],
         questions:'',
         examlist:[],
-         currentTime:new Date().getTime(),
-                startTime:new Date().getTime(),
-                endTime:JSON.parse(sessionStorage.getItem('endtime'))
+          userdetail:{
+        usertype:'',
+        userid:''
+      },
+        currentTime:new Date().getTime(),
+        startTime:new Date().getTime(),
+        endTime:JSON.parse(sessionStorage.getItem('endtime'))
 
     }
 },
 methods:{
-  con(){
-console.log(this.questions)
-console.log(this.answer)
+  submit(){
+// console.log(this.questions)
+     this.params.examlist=this.examlist;
+     this.params.questions=this.questions;
+     this.params.userdetail=this.userdetail;
+     console.log(this.params)
+     this.postRequest('/api/answer/submitexam',this.params).then(resp=>{   
+ 
+         });
   },
   countDownS_cb: function (x) {
     console.log("1")
