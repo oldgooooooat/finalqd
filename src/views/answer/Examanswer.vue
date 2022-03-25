@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 09:05:29
- * @LastEditTime: 2022-03-23 10:01:37
+ * @LastEditTime: 2022-03-25 10:54:05
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examanswer.vue
@@ -12,12 +12,12 @@
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>在线考试</el-breadcrumb-item>
     </el-breadcrumb>
-    <div style="float:right">
+    <!-- <div style="float:right">
                   <el-button type="primary" plain>主要按钮</el-button>
 
-        </div>
+        </div> -->
 
-    <div>
+    <div style="margin-top:40px">
            <el-table
       :data="examlist"
           tooltip-effect="dark"

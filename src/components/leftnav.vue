@@ -106,6 +106,24 @@ export default {
             }
           ]
 
+        },
+          { menuid:8,
+          
+          icon: 'li-icon-xiangmuguanli',
+          menuname: '考试记录',
+          hasThird: null,
+          url: null,
+          menus:[
+              {
+              menuid: 9,
+              icon: 'icon-cat-skuQuery',
+              menuname: '考试记录',
+              hasThird: 'N',
+              url: 'record/Examrecord',
+              menus: null
+            }
+          ]
+
         }
         
        

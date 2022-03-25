@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 13:43:16
- * @LastEditTime: 2022-03-19 14:41:19
+ * @LastEditTime: 2022-03-25 09:34:27
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examcontext.vue
@@ -66,10 +66,11 @@ v-on:end_callback="countDownE_cb()"
     </div>
          </el-checkbox-group>
 
-  </div>
-               <el-button type="success" round @click="submit">成功按钮</el-button>
-
+  </div >
+  <div style="text-align:center">
+               <el-button   type="success" round @click="submit">提交</el-button>
 </div>
+  </div>
 </template>
 
 <script>
@@ -123,13 +124,32 @@ data(){
 methods:{
   submit(){
 // console.log(this.questions)
+ 
      this.params.examlist=this.examlist;
      this.params.questions=this.questions;
      this.params.userdetail=this.userdetail;
-     console.log(this.params)
-     this.postRequest('/api/answer/submitexam',this.params).then(resp=>{   
+
+         this.$confirm('此操作将提交试卷,并关闭窗口 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+      this.postRequest('/api/answer/submitexam',this.params).then(resp=>{   
  
+ window.opener = null;
+window.open("about:blank", "_top").close()
          });
+         
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          });          
+        });
+
+
+    
+   
   },
   countDownS_cb: function (x) {
     console.log("1")
