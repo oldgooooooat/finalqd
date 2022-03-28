@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 14:12:48
- * @LastEditTime: 2022-03-25 15:48:46
+ * @LastEditTime: 2022-03-28 09:13:20
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Examrecorddetail.vue
@@ -20,12 +20,77 @@
   </div>
 
   <div v-for="(item, index) in alldetail">  
+    <div  >
 <h3>{{(index+1)+':'+item.question.questionName}}</h3>
-<h4>{{item.question.questionDescription}}</h4>
+<h4 >{{item.question.questionDescription}}</h4>
+  <viewer   v-if="item.question.questionPhotos!='' "  :images="photos"
+   >
+         <img style="width: 150px;height: 150px; cursor:pointer" :src="item.question.questionPhotos" :key="item.question.questionPhotos">
+   </viewer>
+    </div>
+ <el-radio-group  v-if="item.question.questionTypeId!=2"
+       v-model="item.answer"  
 
-  
+      >
+        <div       v-for="(item, indexa) in item.questionoptions"
+         
+         style="margin-top:30px"
+        
+          >
+      <el-radio  :label="item.questionOptionId"
+             :disabled="true"
+              >{{item.questionOptionContent}}
+              </el-radio>
+        </div>
+ </el-radio-group>       
+  <el-checkbox-group  v-model="item.answer"  v-if="item.question.questionTypeId==2"  > 
+     
+    <div v-for="(item, indexb) in item.questionoptions" 
+   
+         style="margin-top:30px"
+    >
+<el-checkbox 
+:disabled="true"
+:label="item.questionOptionId"
+:key="item.questionOptionId"
+
+>{{item.questionOptionContent}}
+
+
+</el-checkbox>
     </div>
          </el-checkbox-group>
+<div class='background'>
+<h4>正确答案：</h4>
+       <div      v-for="(item, indexc) in item.questionrightoptions"
+       
+      
+          >
+              <h5 >{{item.questionOptionContent}}</h5>
+                             
+                      
+              
+              </div>
+</div>
+     <div> 
+       <div style="display:inline-block">    
+      <h4>你的答案：</h4>
+       </div>
+       <div style="display:inline-block" >
+      <i class="el-icon-check" v-show="item.correct==1" style="color: rgb(20, 186, 0);"> </i>
+      <i class="el-icon-close" v-show="item.correct!=1" style="color: rgb(248, 9, 9);" > </i>
+        </div>
+     </div>
+        <div      v-for="(item2, indexd) in item.answer"
+     
+         style="margin-top:30px"
+          >          
+             <h5 style="color: rgb(20, 186, 0)"  v-show="item.correct==1">{{item2.questionOptionContent}}</h5>
+             <h5 style="color: rgb(248, 9, 9);"  v-show="item.correct!=1"  >{{item2.questionOptionContent}}</h5>
+              </div>
+          </div>
+  
+    </div>
 
   </div >
 
@@ -37,10 +102,10 @@
 export default {
     mounted(){
 
-console.log(this.$route.params)
-this.recorddetail=this.$route.params.recorddetail;
+ this.recorddetail=JSON.parse(sessionStorage.getItem('recorddetail'))
+ 
   this.postRequest("/api/exam-record/getrecorddetail",this.recorddetail).then(resp=>{
-        this.alldetail=JSON.parse(resp.obj);
+        this.alldetail=JSON.parse(resp.obj)
         console.log(this.alldetail)
       });
 
@@ -54,6 +119,7 @@ this.recorddetail=this.$route.params.recorddetail;
 
 data(){
     return{
+      photos:[],
         show:false,
         examdetail:{},
         alldetail:[],
@@ -64,5 +130,8 @@ data(){
 </script>
 
 <style>
-
+.background{
+  border:1px solid #000;
+  background:rgb(209, 209, 209)
+}
 </style>

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-03-25 14:21:48
+ * @LastEditTime: 2022-03-26 13:50:27
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\router\index.js
@@ -107,7 +107,7 @@ export default new Router({
         ,
         { 
             path: '/record/Examrecord',
-        name: '考试页面',
+        name: '考试详情列表',
         component: examrecord,
         meta: {
             requireAuth: true

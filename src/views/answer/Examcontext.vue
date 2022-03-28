@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 13:43:16
- * @LastEditTime: 2022-03-25 09:34:27
+ * @LastEditTime: 2022-03-28 10:01:36
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examcontext.vue
@@ -31,7 +31,10 @@ v-on:end_callback="countDownE_cb()"
   <div v-for="(item, index) in questions">  
 <h3>{{(index+1)+':'+item.question.questionName}}</h3>
 <h4>{{item.question.questionDescription}}</h4>
-
+  <viewer   v-if="item.question.questionPhotos!='' "  :images="photos"
+   >
+         <img style="width: 150px;height: 150px; cursor:pointer" :src="item.question.questionPhotos" :key="item.question.questionPhotos">
+   </viewer>
   <el-radio-group v-if="item.question.questionTypeId!=2"
        v-model="item.answer"
       >
@@ -41,13 +44,10 @@ v-on:end_callback="countDownE_cb()"
         
           >
       <el-radio  :label="item.questionOptionId"
-              >{{item.questionOptionContent}}
+              >{{optionname[index]+'     '+item.questionOptionContent}}
               </el-radio>
         </div>
- </el-radio-group> 
-           
-
-
+ </el-radio-group>       
   <el-checkbox-group  v-model="item.answer"  v-if="item.question.questionTypeId==2"  > 
      
     <div v-for="(item, index) in item.questionoptions" 
@@ -59,7 +59,7 @@ v-on:end_callback="countDownE_cb()"
 :label="item.questionOptionId"
 :key="item.questionOptionId"
 
->{{item.questionOptionContent}}
+>{{optionname[index]+'     '+item.questionOptionContent}}
 
 
 </el-checkbox>
@@ -136,8 +136,8 @@ methods:{
         }).then(() => {
       this.postRequest('/api/answer/submitexam',this.params).then(resp=>{   
  
- window.opener = null;
-window.open("about:blank", "_top").close()
+//  window.opener = null;
+// window.open("about:blank", "_top").close()
          });
          
         }).catch(() => {

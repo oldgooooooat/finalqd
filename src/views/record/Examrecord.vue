@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 10:42:43
- * @LastEditTime: 2022-03-25 14:26:53
+ * @LastEditTime: 2022-03-26 13:49:09
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Examrecord.vue
@@ -56,6 +56,17 @@
           </el-table-column>
          </el-table>
     </div>
+      <div>
+               <el-pagination  class="footer"
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage"
+                            :page-sizes="[5, 10, 20, 40]" 
+                            :page-size="pagesize"         
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="recordlist.length">    
+                    </el-pagination>
+     </div>
 </div>
 </template>
 
@@ -78,6 +89,8 @@ export default {
      },
 data(){
     return{
+       currentPage:1, //初始页
+               pagesize:10,    //    每页的数据
         recordlist:[],
         userdetail:{
         usertype:'',
@@ -86,11 +99,21 @@ data(){
     }
 },
 methods:{
+       handleSizeChange: function (size) {
+                this.pagesize = size;
+                console.log(this.pagesize)  //每页下拉显示数据
+        },
+        handleCurrentChange: function(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage)  //点击第几页
+        },
  pushdetail(index, row)
        {
          let recorddetail=(index,row)
-         console.log(recorddetail)
-         this.$router.push({name:'考试详情',params:{recorddetail:recorddetail}});
+        //  console.log(recorddetail)
+     
+        sessionStorage.setItem('recorddetail',JSON.stringify(recorddetail));
+         this.$router.push({name:'考试详情'});
 
 //  this.$router.replace('/answer/Examcontext').catch(err => {
 //    console.log(err)
@@ -102,5 +125,16 @@ methods:{
 </script>
 
 <style>
+.footer{
 
+height: 100px;
+
+width: 100%;
+
+text-align: center;
+position: fixed;
+
+bottom: 0;
+
+}
 </style>
