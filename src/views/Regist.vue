@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-10 10:10:14
- * @LastEditTime: 2022-02-16 09:18:26
+ * @LastEditTime: 2022-03-29 13:29:15
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \finalqd\src\components\Login.vue
@@ -35,6 +35,11 @@
                 <el-input type="text" v-model="registForm.nickname" auto-complete="off" placeholder="请输入昵称"  @keydown.enter.native="submitRegist"
 ></el-input>
             </el-form-item>
+            <el-tag>班级</el-tag>
+            <el-form-item prop="classname">
+                <el-input type="text" v-model="registForm.classname" auto-complete="off" placeholder="请输入班级名称"  @keydown.enter.native="submitRegist"
+></el-input>
+            </el-form-item>
             <el-button type="primary" style="width: 100%" @click="submitRegist">注册</el-button>
         </el-form>
     </div>
@@ -52,7 +57,8 @@ import { regist } from '../api/userMG'
                   username:"",
                   password:"",
                   email:"",
-                  nickname:""
+                  nickname:"",
+                  classname:""
                 },
                 checked:true,
                 rules:{
@@ -61,6 +67,7 @@ import { regist } from '../api/userMG'
                     password:[{required:true,message:"密码不能为空",trigger:"blur"}],
                     email:[{required:true,message:"邮箱不能为空",trigger:"blur"}],
                     nickname:[{required:true,message:"昵称不能为空",trigger:"blur"}],
+                     classname:[{required:true,message:"班级不能为空",trigger:"blur"}],
                 }
             }
         },

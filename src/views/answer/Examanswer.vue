@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 09:05:29
- * @LastEditTime: 2022-03-25 10:54:05
+ * @LastEditTime: 2022-03-29 15:12:20
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examanswer.vue
@@ -63,7 +63,10 @@
          <template slot-scope="scope">
 
         
-        <el-button type="text" v-if="(scope.$index, scope.row).examSwitch!=3"  @click="pushcontext(scope.$index, scope.row)"   size="small">考试</el-button>
+        <el-button type="text"  v-if="(scope.$index, scope.row).times==0&&(scope.$index, scope.row).examSwitch==2" @click="pushcontext(scope.$index, scope.row)"   size="small">考试</el-button>
+        <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==1"  @click="alert1()"   size="small">未开始</el-button>
+        <el-button type="text" v-if="(scope.$index, scope.row).times!=0&&(scope.$index, scope.row).examSwitch==2"  @click="alert()"   size="small">已考</el-button>
+        <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==3"  @click="alert2()"   size="small">已结束</el-button>
 
          </template>
           </el-table-column>
@@ -107,10 +110,13 @@ export default {
    },
    data(){
        return{
+         photos:[],
          userdetail:{},
           currentPage:1, //初始页
                pagesize:10,    //    每页的数据
-          examlist:[]
+          examlist:[],
+          examdetaillist:[],
+        
        }
    },
    methods:{
@@ -122,16 +128,40 @@ export default {
                 this.currentPage = currentPage;
                 console.log(this.currentPage)  //点击第几页
         },
+         alert() {
+        this.$message({
+          message: '这个考试你已经参加过了',
+          type: 'warning'
+        });
+      },
+       alert1() {
+        this.$message({
+          message: '这个考试暂未开始',
+          type: 'warning'
+        });
+      },
+       alert2() {
+        this.$message({
+          message: '这个考试已经结束',
+          type: 'warning'
+        });
+      },
        pushcontext(index, row)
        {
          let params=(index, row);
          let endtime=(new Date().getTime()+1000*60*params.examTimeLimit)
          sessionStorage.setItem('params',JSON.stringify(params));
          sessionStorage.setItem('endtime',endtime)
-         console.log(endtime)
-           let { href } = this.$router.resolve('/answer/Examcontext')
-window.open(href, '_blank')
+            this.examdetaillist=JSON.parse(sessionStorage.getItem('params'))
+                 this.postRequest('/api/answer/selectexamquestion',this.examdetaillist).then(resp=>{   
+             sessionStorage.setItem('questions',resp.obj)
+});
+   
+//            let { href } = this.$router.resolve('/answer/Examcontext')
+// window.open(href, '_blank')
+         this.$router.push("/answer/Examcontext");
 
+                
 //  this.$router.replace('/answer/Examcontext').catch(err => {
 //    console.log(err)
 // })

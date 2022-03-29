@@ -1,13 +1,20 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 13:43:16
- * @LastEditTime: 2022-03-28 10:01:36
+ * @LastEditTime: 2022-03-29 10:03:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examcontext.vue
 -->
 <template>
 <div>
+   <div>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/answer/Examanswer' }">在线考试</el-breadcrumb-item>
+      <el-breadcrumb-item >考试页面</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
   <div>
   <h2 style="text-align: center;">考试名字：{{this.examlist.examName}}</h2>
   </div>
@@ -86,10 +93,10 @@ export default {
 
       this.userdetail.userid=user.id
       this.userdetail.usertype=user.type
-   this.examlist=JSON.parse(sessionStorage.getItem('params'))
-     this.postRequest('/api/answer/selectexamquestion',this.examlist).then(resp=>{   
-        console.log(resp.obj);
-        this.questions=JSON.parse(resp.obj);
+        this.examlist=JSON.parse(sessionStorage.getItem('params'))
+    //  this.postRequest('/api/answer/selectexamquestion',this.examlist).then(resp=>{   
+        // console.log(resp.obj);
+        this.questions=JSON.parse(sessionStorage.getItem('questions'));
         for(let i=0;i<this.questions.length;i++)
         {
           if(this.questions[i].question.questionTypeId==2)
@@ -103,10 +110,11 @@ export default {
           }
         }
         console.log(this.questions)
-       });
+      //  });
   },
 data(){
     return{
+      photos:[],
         params:{},
         optionname:["A","B","C","D","E","F","G","H","I","J","K"],
         questions:'',
@@ -129,15 +137,16 @@ methods:{
      this.params.questions=this.questions;
      this.params.userdetail=this.userdetail;
 
-         this.$confirm('此操作将提交试卷,并关闭窗口 是否继续?', '提示', {
+         this.$confirm('此操作将提交试卷, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
       this.postRequest('/api/answer/submitexam',this.params).then(resp=>{   
- 
-//  window.opener = null;
-// window.open("about:blank", "_top").close()
+  
+  this.$router.push("/answer/Examanswer");
+
+     
          });
          
         }).catch(() => {

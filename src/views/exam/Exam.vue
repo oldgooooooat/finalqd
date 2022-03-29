@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-03-25 10:29:59
+ * @LastEditTime: 2022-03-29 14:37:33
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -20,6 +20,7 @@
    <Examcreate-dialog :examcreatedisplay.sync="examcreatedisplay"
           v-if="examcreatedisplay"
           :questionlist="questionlist"
+          :userlist="userlist"
    >
    </Examcreate-dialog>
  
@@ -29,6 +30,7 @@
           :examdialoglist="examdialoglist"
           :questionlist="questionlist"
           :bianji="bianji"
+          :userlist="userlist"
    >
    </Exam-dialog>
   
@@ -129,6 +131,11 @@ export default {
 
       this.userdetail.userid=user.id
       this.userdetail.usertype=user.type
+
+        this.getRequest("/api/t-user/getalluser").then(resp=>{
+          this.userlist=resp.obj;
+          console.log(this.userlist)
+      });
  this.postRequest("/api/question/selectallquestion",this.userdetail).then(resp=>{
       
           this.questionlist=resp.obj;
@@ -154,6 +161,7 @@ export default {
         usertype:'',
         userid:''
       },
+           userlist:[],
            examlist:[],
            examdialoglist:[],
            questionlist:[],

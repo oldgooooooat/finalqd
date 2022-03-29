@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-11 13:28:15
- * @LastEditTime: 2022-03-14 13:38:38
+ * @LastEditTime: 2022-03-29 14:44:14
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examdialog.vue
@@ -16,39 +16,48 @@
  >
                             <el-form ref="form" :model="form" label-width="80px">
 
+<el-steps :active="active" finish-status="success" v-show="bianji">
+  <el-step title="步骤 1"></el-step>
+ 
+  <el-step title="步骤 2"></el-step>
+  
+  <el-step title="步骤 3"></el-step>
+
+
+</el-steps>
   <el-tag
-  v-show="putdisplay"
+  v-show="active==0"
   >考试名称</el-tag>
 <el-input
-v-show="putdisplay"
+v-show="active==0"
   v-model="form.examdetail.examName"
   :disabled="disabled"
 >
  </el-input>
  <el-tag
- v-show="putdisplay"
+ v-show="active==0"
  >考试描述</el-tag>
 <el-input
-v-show="putdisplay"
+v-show="active==0"
   v-model="form.examdetail.examDescription"
   :disabled="disabled"
 >
  </el-input>
   <el-tag
-  v-show="putdisplay"
+  v-show="active==0"
   >考试持续时间</el-tag>
 <el-input
-v-show="putdisplay"
+v-show="active==0"
   v-model="form.examdetail.examTimeLimit"
   :disabled="disabled"
 >
  </el-input>
   <el-tag
-  v-show="putdisplay"
+  v-show="active==0"
   >考试起始结束时间</el-tag>
   <div>
    <el-date-picker
-   v-show="putdisplay"
+   v-show="active==0"
       v-model="form.examtime"
       type="datetimerange"
       range-separator="至"
@@ -62,11 +71,22 @@ v-show="putdisplay"
     filterable
     filter-placeholder="请输入题目"
     v-model="form.answer"
-    v-show="choosedisplay"
+    v-show="active==1"
     :data="data"
     :titles="['题库', '考试']"
     >
   </el-transfer>
+  <el-transfer
+    filterable
+    filter-placeholder="请输入题目"
+    v-show="active==2"
+    v-model="form.userlist"
+    :data="userdata"
+    :titles="['人员', '考试人员']"
+    target-order="push"
+    >
+  </el-transfer>
+
 
     <div v-for="(item,i) in question"  v-show="questiondisplay">
    <el-tag>问题标题{{i+1}}</el-tag>
@@ -89,9 +109,9 @@ v-show="putdisplay"
                             </el-form>
                             <div slot="footer" class="dialog-footer">
     <el-button type="primary" @click="close()">关  闭</el-button>
-    <el-button @click="next()" v-show="button1" >下一步</el-button>
-    <el-button @click="back()"v-show="button2">上一步</el-button>
-     <el-button type="primary" @click="submit()" v-show="button2">提交</el-button>
+    <el-button @click="next()" v-show="active<2" >下一步</el-button>
+    <el-button @click="back()"v-show="active>0">上一步</el-button>
+     <el-button type="primary" @click="submit()" v-show="active==2">提交</el-button>
 
     <el-button type="primary" v-show="!this.bianji"  @click="showquestion">题目详情</el-button>
   
@@ -123,6 +143,14 @@ export default {
           }
       });
  
+       this.postRequest("/api/exam/getexamuser",this.form.examdetail).then(resp=>{
+          this.user=resp.obj;
+            for(let i=0;i<this.user.length;i++)
+          {
+            this.form.userlist.push(this.user[i].id);
+          }
+      });
+ 
     },
     data(){
        const generateData = _ => {
@@ -136,7 +164,21 @@ export default {
         }
         return data;
       };
+
+          const generateuserData = _ => {
+        const userdata = [];
+        for (let i = 1; i <= this.userlist.length; i++) {
+          userdata.push({
+            key: this.userlist[i-1].id,
+            label: `${ this.userlist[i-1].nickname}（${this.userlist[i-1].classname}）`,
+            
+          });
+        }
+        return userdata;
+      };
+      
         return{
+          active:0,
           button1:false,
           button2:false,
           putdisplay:true,
@@ -144,8 +186,11 @@ export default {
           questiondisplay:false,
           disabled:true,
           question:[],
+          user:[],
            data:generateData(),
+            userdata:generateuserData(),
             form:{
+            userlist:[],
             answer:[],
             examdetail:[],
             examtime:[]
@@ -175,13 +220,14 @@ export default {
             
       },
       next(){
+
         console.log(this.form.examdetail)
        if( this.form.examdetail.examName.replace(/(^s*)|(s*$)/g, "").length !=0 &&
                   this.form.examdetail.examDescription.replace(/(^s*)|(s*$)/g, "").length !=0 &&
                  this.form.examdetail.examTimeLimit!=0 &&
                   this.form.examtime.length!=0)
                   {
-                
+               this.active++;
        this.button1=false
        this.button2=true
        this.putdisplay=false
@@ -193,6 +239,7 @@ export default {
                   }
       },
         back(){
+          this.active--;
        this.button1=true
        this.button2=false
        this.putdisplay=true
@@ -213,6 +260,7 @@ this.questiondisplay=!this.questiondisplay
             },
     },
  props: {
+             userlist:[],
              bianji:false,
             questionlist:[],
            examdialoglist:[],
