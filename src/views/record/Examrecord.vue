@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 10:42:43
- * @LastEditTime: 2022-03-26 13:49:09
+ * @LastEditTime: 2022-04-02 09:08:18
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Examrecord.vue
@@ -109,11 +109,17 @@ methods:{
         },
  pushdetail(index, row)
        {
-         let recorddetail=(index,row)
+            let recorddetail=(index,row)
+         if(recorddetail.Examswitch==3&&recorddetail.Examtype==0){
+  
         //  console.log(recorddetail)
-     
+
         sessionStorage.setItem('recorddetail',JSON.stringify(recorddetail));
          this.$router.push({name:'考试详情'});
+         }
+         else{
+                  this.$message.error('考试还未结束哦');
+         }
 
 //  this.$router.replace('/answer/Examcontext').catch(err => {
 //    console.log(err)

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 09:05:29
- * @LastEditTime: 2022-03-29 15:12:20
+ * @LastEditTime: 2022-04-02 08:56:59
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examanswer.vue
@@ -155,11 +155,12 @@ export default {
             this.examdetaillist=JSON.parse(sessionStorage.getItem('params'))
                  this.postRequest('/api/answer/selectexamquestion',this.examdetaillist).then(resp=>{   
              sessionStorage.setItem('questions',resp.obj)
+             this.$router.push("/answer/Examcontext");
 });
    
 //            let { href } = this.$router.resolve('/answer/Examcontext')
 // window.open(href, '_blank')
-         this.$router.push("/answer/Examcontext");
+   
 
                 
 //  this.$router.replace('/answer/Examcontext').catch(err => {

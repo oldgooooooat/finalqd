@@ -85,6 +85,14 @@ export default {
               hasThird: 'N',
               url: 'answer/Examanswer',
               menus: null
+            },
+             {
+              menuid: 10,
+              icon: 'icon-cat-skuQuery',
+              menuname: '随机考试',
+              hasThird: 'N',
+              url: 'exam/Randomexam',
+              menus: null
             }
           ]
 

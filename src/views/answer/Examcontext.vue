@@ -1,20 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 13:43:16
- * @LastEditTime: 2022-03-29 10:03:25
+ * @LastEditTime: 2022-04-01 13:48:54
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examcontext.vue
 -->
 <template>
 <div>
-   <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/answer/Examanswer' }">在线考试</el-breadcrumb-item>
-      <el-breadcrumb-item >考试页面</el-breadcrumb-item>
-    </el-breadcrumb>
-  </div>
+ 
   <div>
   <h2 style="text-align: center;">考试名字：{{this.examlist.examName}}</h2>
   </div>

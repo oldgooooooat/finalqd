@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-03-26 13:50:27
+ * @LastEditTime: 2022-03-31 09:14:12
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\router\index.js
@@ -25,11 +25,13 @@ import examanswer from '@/views/answer/examanswer'
 import examcontext from '@/views/answer/examcontext'
 import examrecord from '@/views/record/Examrecord'
 import examrecorddetail from '@/views/record/Examrecorddetail'
+import randomexam from '@/views/exam/Randomexam'
 // 启用路由
 Vue.use(Router);
 
 // 导出路由 
 export default new Router({
+
     routes: [{
         path: '/',
         name: '',
@@ -95,7 +97,15 @@ export default new Router({
         }
 
         }
-        ,
+        ,     { 
+            path: '/exam/Randomexam',
+        name: '随机考试',
+        component: randomexam,
+        meta: {
+            requireAuth: true
+        }
+
+        },
         { 
             path: '/answer/Examcontext',
         name: '考试页面',

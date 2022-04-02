@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-11 13:28:15
- * @LastEditTime: 2022-03-29 14:44:14
+ * @LastEditTime: 2022-03-30 09:23:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examdialog.vue
@@ -109,7 +109,7 @@ v-show="active==0"
                             </el-form>
                             <div slot="footer" class="dialog-footer">
     <el-button type="primary" @click="close()">关  闭</el-button>
-    <el-button @click="next()" v-show="active<2" >下一步</el-button>
+    <el-button @click="next()" v-show="active<2&&bianji==true" >下一步</el-button>
     <el-button @click="back()"v-show="active>0">上一步</el-button>
      <el-button type="primary" @click="submit()" v-show="active==2">提交</el-button>
 
