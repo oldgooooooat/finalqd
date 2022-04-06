@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 10:42:43
- * @LastEditTime: 2022-04-02 09:08:18
+ * @LastEditTime: 2022-04-06 09:54:05
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Examrecord.vue
@@ -13,6 +13,8 @@
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>考试记录</el-breadcrumb-item>
     </el-breadcrumb>
+         <el-button type="primary" style="float:right" @click="exportTable()">导出表格</el-button>
+
   </div>
     <div style="margin-top:40px">
          <el-table
@@ -99,6 +101,15 @@ data(){
     }
 },
 methods:{
+    exportTable(){
+         require.ensure([],()=>{
+           const { export_json_to_excel} =require("@/excel/Export2Excel");
+           const filedName =["考试名称","考试分数","考试总分","考试时间"];
+           const filterVal =["ExamName","AnswerScore","ExamMaxScore","CreateTime"];
+           const data=this.recordlist.map(v=>filterVal.map(j=>v[j]));
+           export_json_to_excel(filedName,data,"考试记录");
+         })
+      },
        handleSizeChange: function (size) {
                 this.pagesize = size;
                 console.log(this.pagesize)  //每页下拉显示数据

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-03-29 14:37:33
+ * @LastEditTime: 2022-04-02 09:41:08
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -92,7 +92,7 @@
         <el-button  type="text"v-if="(scope.$index, scope.row).examSwitch!=1" @click="selectquestion1(scope.$index, scope.row)" size="small">查看</el-button>
         <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==1" @click="selectquestion2(scope.$index, scope.row)"size="small">编辑</el-button>
                 <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==2" @click="closeexam(scope.$index, scope.row)"size="small">关闭</el-button>
-
+   <el-button type="text"  @click="result(scope.$index, scope.row)"size="small">分数</el-button>
       </template>
           </el-table-column>
 
@@ -187,6 +187,12 @@ export default {
      },
            handleSelectionChange(val) {
         this.multipleSelection = val;
+      },
+      result(index, row){
+        let examresult=(index,row);
+        sessionStorage.setItem('examresult',JSON.stringify(examresult));
+        this.$router.push({name:'考试分数'});
+
       },
       del(){
    this.$confirm('此操作将永久删除考试, 是否继续?', '提示', {
