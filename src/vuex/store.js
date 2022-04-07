@@ -11,12 +11,12 @@ export default new Vuex.Store({
         // 登录
         login(state, user) {
             state.user = user;
-            localStorage.setItem("userInfo", user);
+            sessionStorage.setItem("userInfo", user);
         },
         // 退出
         logout(state, user) {
             state.user = "";
-            localStorage.setItem("userInfo", "");
+            sessionStorage.setItem("userInfo", "");
         }
     }
 })

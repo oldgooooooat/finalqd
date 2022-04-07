@@ -32,8 +32,10 @@ export default {
   // 创建完毕状态(里面是操作)
  
   created() {
-    this.user = JSON.parse(localStorage.getItem('userdata'))
-      const user=JSON.parse(getCookie('user'));
+           const user=JSON.parse(localStorage.getItem("user"))
+
+    // this.user = JSON.parse(localStorage.getItem('userdata'))
+      // const user=JSON.parse(getCookie('user'));
     this.username=user.nickname;
   },
   methods: {

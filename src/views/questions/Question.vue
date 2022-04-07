@@ -314,7 +314,8 @@ import questioncategory from './Questioncategory.vue'
     mounted(){
       
       const user=JSON.parse(getCookie('user'));
-
+      console.log(222222222)
+      console.log(user)
       this.userdetail.userid=user.id
       this.userdetail.usertype=user.type
       this.postRequest("/api/question/selectallquestion",this.userdetail).then(resp=>{
@@ -337,7 +338,9 @@ import questioncategory from './Questioncategory.vue'
         },
        submitFrom()
        {
-          const user=JSON.parse(getCookie('user'));
+                const user=JSON.parse(localStorage.getItem("user"))
+
+          // const user=JSON.parse(getCookie('user'));
         this.form.userid=user.id;
          var submit=true;
          var submit2=true;

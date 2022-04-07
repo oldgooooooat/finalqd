@@ -7167,6 +7167,11 @@
   "resolved" "https://registry.npmmirror.com/vm-browserify/-/vm-browserify-1.1.2.tgz"
   "version" "1.1.2"
 
+"vue-cookies@^1.7.4":
+  "integrity" "sha512-mOS5Btr8V9zvAtkmQ7/TfqJIropOx7etDAgBywPCmHjvfJl2gFbH2XgoMghleLoyyMTi5eaJss0mPN7arMoslA=="
+  "resolved" "https://registry.npmmirror.com/vue-cookies/-/vue-cookies-1.7.4.tgz"
+  "version" "1.7.4"
+
 "vue-hot-reload-api@^2.2.0":
   "integrity" "sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog=="
   "resolved" "https://registry.npmmirror.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz"

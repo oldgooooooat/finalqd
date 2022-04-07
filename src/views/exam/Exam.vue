@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-04-02 09:41:08
+ * @LastEditTime: 2022-04-07 08:49:17
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -127,7 +127,9 @@ export default {
   'Exam-dialog':Examdialog,
    },
    mounted(){
-       const user=JSON.parse(getCookie('user'));
+            const user=JSON.parse(localStorage.getItem("user"))
+
+      //  const user=JSON.parse(getCookie('user'));
 
       this.userdetail.userid=user.id
       this.userdetail.usertype=user.type

@@ -22,125 +22,143 @@
 </template>
 <script>
 import { menu } from '../api/userMG'
+import  { getCookie }from '../utils/util.js';
+
 export default {
   name: 'leftnav',
   data() {
     return {
       collapsed: false,
-      allmenu: []
+      allmenu: [],
+          userdetail:{
+        usertype:'',
+        userid:''
+      },
     }
   },
   // 创建完毕状态(里面是操作)
   created() {
+           const user=JSON.parse(localStorage.getItem("user"))
+
+    // const user=JSON.parse(getCookie('user'));
+      this.userdetail.userid=user.id
+      this.userdetail.usertype=user.type
+      console.log(this.userdetail)
+        this.postRequest("/api/t-menu/getmenu",this.userdetail).then(resp=>{
+           this.allmenu=resp.obj
+        console.log(resp.obj)
+            
+      });
+     
     // 获取图形验证码
-    let res = {
-      success: true,
-      data: [
-        {
-          menuid: 1,
-          icon: 'li-icon-xiangmuguanli',
-          menuname: '基础管理',
-          hasThird: null,
-          url: null,
-          menus: [
-            {
-              menuid: 2,
-              icon: 'icon-cat-skuQuery',
-              menuname: '问题管理',
-              hasThird: 'N',
-              url: 'questions/Question',
-              menus: null
-            }
-          ]
-        },
-        { menuid:3,
+    // let res = {
+    //   success: true,
+    //   data: [
+    //     {
+    //       menuid: 1,
+    //       icon: 'li-icon-xiangmuguanli',
+    //       menuname: '基础管理',
+    //       hasThird: null,
+    //       url: null,
+    //       menus: [
+    //         {
+    //           menuid: 2,
+    //           icon: 'icon-cat-skuQuery',
+    //           menuname: '问题管理',
+    //           hasThird: 'N',
+    //           url: 'questions/Question',
+    //           menus: null
+    //         }
+    //       ]
+    //     },
+    //     { menuid:3,
           
-          icon: 'li-icon-xiangmuguanli',
-          menuname: '答题',
-          hasThird: null,
-          url: null,
-          menus:[
-              {
-              menuid: 2,
-              icon: 'icon-cat-skuQuery',
-              menuname: '自由回答',
-              hasThird: 'N',
-              url: 'answer/Answer',
-              menus: null
-            }
-          ]
+    //       icon: 'li-icon-xiangmuguanli',
+    //       menuname: '答题',
+    //       hasThird: null,
+    //       url: null,
+    //       menus:[
+    //           {
+    //           menuid: 4,
+    //           icon: 'icon-cat-skuQuery',
+    //           menuname: '自由回答',
+    //           hasThird: 'N',
+    //           url: 'answer/Answer',
+    //           menus: null
+    //         }
+    //       ]
 
-        },
-        { menuid:6,
+    //     },
+    //     { menuid:5,
           
-          icon: 'li-icon-xiangmuguanli',
-          menuname: '在线考试',
-          hasThird: null,
-          url: null,
-          menus:[
-              {
-              menuid: 7,
-              icon: 'icon-cat-skuQuery',
-              menuname: '在线考试',
-              hasThird: 'N',
-              url: 'answer/Examanswer',
-              menus: null
-            },
-             {
-              menuid: 10,
-              icon: 'icon-cat-skuQuery',
-              menuname: '随机考试',
-              hasThird: 'N',
-              url: 'exam/Randomexam',
-              menus: null
-            }
-          ]
+    //       icon: 'li-icon-xiangmuguanli',
+    //       menuname: '在线考试',
+    //       hasThird: null,
+    //       url: null,
+    //       menus:[
+    //           {
+    //           menuid: 6,
+    //           icon: 'icon-cat-skuQuery',
+    //           menuname: '在线考试',
+    //           hasThird: 'N',
+    //           url: 'answer/Examanswer',
+    //           menus: null
+    //         },
+    //          {
+    //           menuid: 7,
+    //           icon: 'icon-cat-skuQuery',
+    //           menuname: '随机考试',
+    //           hasThird: 'N',
+    //           url: 'exam/Randomexam',
+    //           menus: null
+    //         }
+    //       ]
 
-        },
-        { menuid:4,
+    //     },
+    //     { menuid:8,
           
-          icon: 'li-icon-xiangmuguanli',
-          menuname: '考试管理',
-          hasThird: null,
-          url: null,
-          menus:[
-              {
-              menuid: 5,
-              icon: 'icon-cat-skuQuery',
-              menuname: '考试管理',
-              hasThird: 'N',
-              url: 'exam/Exam',
-              menus: null
-            }
-          ]
+    //       icon: 'li-icon-xiangmuguanli',
+    //       menuname: '考试管理',
+    //       hasThird: null,
+    //       url: null,
+    //       menus:[
+    //           {
+    //           menuid: 9,
+    //           icon: 'icon-cat-skuQuery',
+    //           menuname: '考试管理',
+    //           hasThird: 'N',
+    //           url: 'exam/Exam',
+    //           menus: null
+    //         }
+    //       ]
 
-        },
-          { menuid:8,
+    //     },
+    //       { menuid:10,
           
-          icon: 'li-icon-xiangmuguanli',
-          menuname: '考试记录',
-          hasThird: null,
-          url: null,
-          menus:[
-              {
-              menuid: 9,
-              icon: 'icon-cat-skuQuery',
-              menuname: '考试记录',
-              hasThird: 'N',
-              url: 'record/Examrecord',
-              menus: null
-            }
-          ]
+    //       icon: 'li-icon-xiangmuguanli',
+    //       menuname: '考试记录',
+    //       hasThird: null,
+    //       url: null,
+    //       menus:[
+    //           {
+    //           menuid: 11,
+    //           icon: 'icon-cat-skuQuery',
+    //           menuname: '考试记录',
+    //           hasThird: 'N',
+    //           url: 'record/Examrecord',
+    //           menus: null
+    //         }
+    //       ]
 
-        }
+    //     }
         
        
        
      
-      ],
-      msg: 'success'
-    }
-          this.allmenu = res.data
+    //   ],
+    //   msg: 'success'
+    // }
+          // this.allmenu = res.data
     
     // menu(localStorage.getItem('logintoken'))
     //   .then(res => {

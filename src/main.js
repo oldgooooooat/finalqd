@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-03-11 10:17:52
+ * @LastEditTime: 2022-04-06 16:09:58
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\main.js
@@ -41,6 +41,9 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
+
 //日期格式化
 import moment from 'moment'//导入文件
 Vue.prototype.$moment = moment;//赋值使用
@@ -79,7 +82,7 @@ Object.keys(custom).forEach(key => {
 router.beforeEach((to, from, next) => {
     if (to.matched.length != 0) {
         if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
-            if (Boolean(localStorage.getItem("userInfo"))) { // 通过vuex state获取当前的user是否存在
+            if (Boolean(sessionStorage.getItem("userInfo"))) { // 通过vuex state获取当前的user是否存在
                 next();
             } else {
                 next({
@@ -88,7 +91,7 @@ router.beforeEach((to, from, next) => {
                 })
             }
         } else {
-            if (Boolean(localStorage.getItem("userInfo"))) { // 判断是否登录
+            if (Boolean(sessionStorage.getItem("userInfo"))) { // 判断是否登录
                 if (to.path != "/" && to.path != "/login") { //判断是否要跳到登录界面
                     next();
                 } else {

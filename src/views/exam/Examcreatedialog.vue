@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-03-29 14:42:14
+ * @LastEditTime: 2022-04-07 08:49:20
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
@@ -190,7 +190,9 @@ data(){
                   }
          },
          submit(){
-        const user=JSON.parse(getCookie('user'));
+                  const user=JSON.parse(localStorage.getItem("user"))
+
+        // const user=JSON.parse(getCookie('user'));
         this.Form.userid=user.id;
 this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
         this.active--
