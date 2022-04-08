@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-31 09:09:31
- * @LastEditTime: 2022-04-07 08:49:26
+ * @LastEditTime: 2022-04-07 13:45:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Randomexam.vue
@@ -220,10 +220,11 @@ methods:{
             this.examdetaillist=JSON.parse(sessionStorage.getItem('params'))
                  this.postRequest('/api/answer/selectexamquestion',this.examdetaillist).then(resp=>{   
              sessionStorage.setItem('questions',resp.obj)
+                      this.$router.push("/answer/Examcontext");
+
 });
    
 
-         this.$router.push("/answer/Examcontext");
 
                 
 
@@ -245,7 +246,7 @@ methods:{
         }).then(() => {
 
           this.postRequest('/api/exam/addrandomexam',this.Form).then(resp=>{                           
-                   
+                     location.reload();  
                          })
         }).catch(() => {
           this.$message({

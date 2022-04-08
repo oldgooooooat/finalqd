@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-04-06 16:09:58
+ * @LastEditTime: 2022-04-07 09:06:40
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\main.js
@@ -99,7 +99,7 @@ router.beforeEach((to, from, next) => {
                      * 防刷新，如果登录，修改路由跳转到登录页面，修改路由为登录后的首页 
                      */
                     next({
-                        path: '/questions/Question'
+                        path: '/show'
                     })
                 }
             } else {

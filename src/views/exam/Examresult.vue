@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-04-02 09:21:19
- * @LastEditTime: 2022-04-06 10:03:52
+ * @LastEditTime: 2022-04-08 10:28:22
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examresult.vue
@@ -81,9 +81,11 @@ export default {
        this.postRequest('/api/exam-record/getexamresult',this.examdetail).then(resp=>{                           
                    this.resultlist=resp.obj
                            for(let i=0;i<this.resultlist.length;i++)
-                           if(this.resultlist.RecordId!=null)
-     {
+             {
+                            
+                            
      this.resultlist[i].CreateTime=this.$moment(this.resultlist[i].CreateTime).format("YYYY-MM-DD HH:mm:ss")
+                               
      }
                    console.log(resp.obj)
                          })

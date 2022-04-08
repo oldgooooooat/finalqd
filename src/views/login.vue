@@ -72,7 +72,7 @@ this.postKeyValueRequest('/api/doLogin',this.ruleForm).then(resp=>{
             localStorage.setItem("user",user);
               //  setCookie('user', user, 7)
             this.$store.commit('login', 'true')
-            this.$router.push({ path: '/questions/Question' })
+            this.$router.push({ path: '/show' })
           }, 1000)
             }
            

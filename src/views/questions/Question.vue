@@ -313,7 +313,7 @@ import questioncategory from './Questioncategory.vue'
     },
     mounted(){
       
-      const user=JSON.parse(getCookie('user'));
+            const user=JSON.parse(localStorage.getItem("user"))
       console.log(222222222)
       console.log(user)
       this.userdetail.userid=user.id

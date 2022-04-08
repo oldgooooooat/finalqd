@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 10:42:43
- * @LastEditTime: 2022-04-07 08:49:35
+ * @LastEditTime: 2022-04-07 13:51:11
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Examrecord.vue
@@ -122,7 +122,7 @@ methods:{
  pushdetail(index, row)
        {
             let recorddetail=(index,row)
-         if(recorddetail.Examswitch==3&&recorddetail.Examtype==0){
+         if(recorddetail.Examswitch==3 || recorddetail.Examtype==1){
   
         //  console.log(recorddetail)
 

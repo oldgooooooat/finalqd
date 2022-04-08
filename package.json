@@ -19,6 +19,7 @@
     "script-loader": "^0.7.2",
     "v-viewer": "^1.6.4",
     "vue": "^2.5.2",
+    "vue-clock2": "^1.1.5",
     "vue-cookies": "^1.7.4",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
