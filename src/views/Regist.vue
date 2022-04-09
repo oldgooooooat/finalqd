@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-10 10:10:14
- * @LastEditTime: 2022-03-29 13:29:15
+ * @LastEditTime: 2022-04-09 10:58:45
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \finalqd\src\components\Login.vue
@@ -12,7 +12,11 @@
         <!--:model 表单里面的数据对象-->
         <!-- ref="loginForm" 绑定校验表单 -->
         <el-form :rules="rules" :model="registForm" class="demo-ruleForm login-container" ref="registForm">
+<div>
+                <i class="el-icon-back" @click="back()">返回</i>
+
            <h3 class="title">用户注册</h3>
+</div>      
             <!--表单里面的每一项叫做<el-form-item></el-form-item,要加个prop属性，本来是不用加的，但是我们这个使用了字段校验，这种情况家就一定要加prop属性-->
             <el-form-item prop="username">
                 <!--auto-complete:是否自动补全-->
@@ -72,6 +76,10 @@ import { regist } from '../api/userMG'
             }
         },
         methods:{
+                 back()
+  {
+    this.$router.back()
+  },
              submitRegist(){
                 this.$refs.registForm.validate((validate) =>{  // Element自带的校验
                     if(validate){

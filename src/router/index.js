@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-04-07 09:07:27
+ * @LastEditTime: 2022-04-09 08:57:57
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\router\index.js
@@ -28,6 +28,7 @@ import examrecorddetail from '@/views/record/Examrecorddetail'
 import randomexam from '@/views/exam/Randomexam'
 import examresult from '@/views/exam/examresult'
 import show from '@/views/show'
+import personcenter from '@/views/personcenter'
 // 启用路由
 Vue.use(Router);
 
@@ -149,7 +150,16 @@ export default new Router({
         meta: {
             requireAuth: true
         }
+        },
+        { 
+            path: '/personcenter',
+        name: '个人中心',
+        component: personcenter,
+        meta: {
+            requireAuth: true
         }
+        }
+
 
  
     
