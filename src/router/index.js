@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-04-09 08:57:57
+ * @LastEditTime: 2022-04-11 14:34:27
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\router\index.js
@@ -29,6 +29,8 @@ import randomexam from '@/views/exam/Randomexam'
 import examresult from '@/views/exam/examresult'
 import show from '@/views/show'
 import personcenter from '@/views/personcenter'
+import questioncollection from '@/views/record/questioncollection'
+import questioncontext from '@/views/record/questioncontext'
 // 启用路由
 Vue.use(Router);
 
@@ -158,7 +160,24 @@ export default new Router({
         meta: {
             requireAuth: true
         }
+        },
+        { 
+            path: '/record/questioncollection',
+        name: '题目收藏',
+        component: questioncollection,
+        meta: {
+            requireAuth: true
         }
+        },
+        { 
+            path: '/record/questioncontext',
+        name: '题目详细',
+        component: questioncontext,
+        meta: {
+            requireAuth: true
+        }
+        }
+
 
 
  

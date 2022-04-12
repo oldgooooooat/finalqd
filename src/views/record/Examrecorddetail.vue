@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 14:12:48
- * @LastEditTime: 2022-04-06 09:04:11
+ * @LastEditTime: 2022-04-11 14:02:15
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Examrecorddetail.vue
@@ -23,7 +23,16 @@
 
   <div v-for="(item, index) in alldetail">  
     <div  >
+      <div>
+      <div style="display: inline-block;">
 <h3>{{(index+1)+':'+item.question.questionName}}</h3>
+    </div>
+    <div  style="display: inline-block;">
+     <i style="font-size:20px" v-if="item.collectioncount==1" @click="Collectionoff(item.question.questionId,index)" class="el-icon-star-on" ></i> 
+     <i id="index" class="el-icon-star-off" v-if="item.collectioncount==0" @click="Collection(item.question.questionId,index)" ></i>
+    </div>
+    </div>
+
 <h4 >{{item.question.questionDescription}}</h4>
   <viewer   v-if="item.question.questionPhotos!='' "  :images="photos"
    >
@@ -103,7 +112,12 @@
 <script>
 export default {
     mounted(){
+  const user=JSON.parse(localStorage.getItem("user"))
 
+      //  const user=JSON.parse(getCookie('user'));
+
+      this.userdetail.userid=user.id
+      this.userdetail.usertype=user.type
  this.recorddetail=JSON.parse(sessionStorage.getItem('recorddetail'))
   this.model=JSON.parse(sessionStorage.getItem('model'))
  console.log(this.model)
@@ -127,10 +141,39 @@ data(){
         show:false,
         examdetail:{},
         alldetail:[],
-        recorddetail:{}
+        recorddetail:{},
+         userdetail:{
+        usertype:'',
+        userid:''
+      },
+       multipleSelection: []
     }
 },
 methods:{
+  Collection(questionid,index){
+    const params={};
+    params.questionid=questionid;
+    params.userid=this.userdetail.userid;
+       this.postRequest("/api/exam-record/addcollectionquestion",params).then(resp=>{
+     
+            this.alldetail[index].collectioncount++;
+      });
+   console.log( this.alldetail[index])
+    console.log(index)
+    console.log(questionid)
+
+  },
+    Collectionoff(questionid,index){
+    const params={};
+    params.questionid=questionid;
+    params.userid=this.userdetail.userid;
+       this.postRequest("/api/exam-record/deletecollectionquestion",params).then(resp=>{
+     
+            this.alldetail[index].collectioncount--;
+      });
+
+
+  },
   back()
   {
     this.$router.back()
