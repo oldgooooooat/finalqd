@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-04-07 08:49:17
+ * @LastEditTime: 2022-04-22 09:35:54
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -13,10 +13,17 @@
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>考试管理</el-breadcrumb-item>
     </el-breadcrumb>
+            <el-button type="primary" plain style="float:right" @click="peopleimportdisplay=true">导入人员</el-button>
         <el-button type="primary" plain style="float:right" @click="examcreatedisplay=true">添加考试</el-button>
           <el-button type="danger" style="float:right" @click="del()" plain>删除考试</el-button>
 
         <div>
+      <Peopleimport-dialog :peopleimportdisplay.sync="peopleimportdisplay"
+          v-if="peopleimportdisplay"
+          
+          >
+
+      </Peopleimport-dialog>
    <Examcreate-dialog :examcreatedisplay.sync="examcreatedisplay"
           v-if="examcreatedisplay"
           :questionlist="questionlist"
@@ -116,7 +123,7 @@
 
 <script>
 import  { getCookie }from '../../utils/util.js';
-
+import peopleimport from'./importpeople.vue'
 import Examcreate from'./Examcreatedialog.vue'
 import Examdialog from'./Examdialog.vue'
  export const examswitch={'1':'未开启','2':'持续中','3':'已结束'}
@@ -125,6 +132,7 @@ export default {
    components:{
   'Examcreate-dialog':Examcreate,
   'Exam-dialog':Examdialog,
+  'Peopleimport-dialog':peopleimport
    },
    mounted(){
             const user=JSON.parse(localStorage.getItem("user"))
@@ -170,6 +178,7 @@ export default {
            bianji:false,
            examcreatedisplay:false,
            examdialogdisplay:false,
+           peopleimportdisplay:false,
                      multipleSelection:[]
 
        }

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-04-02 09:21:19
- * @LastEditTime: 2022-04-11 14:38:25
+ * @LastEditTime: 2022-04-21 14:17:52
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examresult.vue
@@ -120,13 +120,18 @@ export default {
       },
      pushdetail(index, row)
        {
+         
             let recorddetail=(index,row)
-
+      if(recorddetail.RecordId!=null)
+      {
         //  console.log(recorddetail)
         sessionStorage.setItem('model',JSON.stringify(1));
         sessionStorage.setItem('recorddetail',JSON.stringify(recorddetail));
          this.$router.push({name:'考试详情'});
-         
+         }
+         else{
+           this.$message.error('该人员未考试')
+         }
     
 
 //  this.$router.replace('/answer/Examcontext').catch(err => {
