@@ -22,6 +22,7 @@
     "vue-clock2": "^1.1.5",
     "vue-cookies": "^1.7.4",
     "vue-router": "^3.0.1",
+    "vue-visibility-change": "^1.2.1",
     "vuex": "^3.0.1",
     "xlsx": "^0.16.0"
   },

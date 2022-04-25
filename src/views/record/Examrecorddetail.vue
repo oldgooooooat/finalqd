@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-25 14:12:48
- * @LastEditTime: 2022-04-11 14:02:15
+ * @LastEditTime: 2022-04-25 14:58:26
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Examrecorddetail.vue
@@ -122,8 +122,12 @@ export default {
   this.model=JSON.parse(sessionStorage.getItem('model'))
  console.log(this.model)
   this.postRequest("/api/exam-record/getrecorddetail",this.recorddetail).then(resp=>{
-        this.alldetail=JSON.parse(resp.obj)
+       
+       this.alldetail=JSON.parse(resp.obj)
+       console.log("test")
         console.log(this.alldetail)
+       console.log("test")
+
       });
 
        this.postRequest("/api/exam-record/getexamdetail",this.recorddetail).then(resp=>{
@@ -146,7 +150,7 @@ data(){
         usertype:'',
         userid:''
       },
-       multipleSelection: []
+      
     }
 },
 methods:{

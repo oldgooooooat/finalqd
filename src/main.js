@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-15 14:41:24
- * @LastEditTime: 2022-04-07 09:06:40
+ * @LastEditTime: 2022-04-25 14:16:28
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \tesssst\src\main.js
@@ -69,6 +69,8 @@ Viewer.setDefaults({
     'url': 'data-source'
   }
 })
+import visiblility from 'vue-visibility-change'
+Vue.use(visiblility);
 // 使用element UI
 Vue.use(ElementUI);
 // 过滤器

@@ -1,13 +1,13 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 13:43:16
- * @LastEditTime: 2022-04-07 08:49:05
+ * @LastEditTime: 2022-04-25 15:12:33
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examcontext.vue
 -->
 <template>
-<div>
+<div v-visibility-change="pageHidden">
  
   <div>
   <h2 style="text-align: center;">考试名字：{{this.examlist.examName}}</h2>
@@ -83,6 +83,11 @@ export default {
 },
 
   mounted(){
+    //防止切换页面
+  this.times=0;
+    //
+    const testtype=sessionStorage.getItem("testtype")
+    this.type=testtype;
            const user=JSON.parse(localStorage.getItem("user"))
 
       //  const user=JSON.parse(getCookie('user'));
@@ -110,6 +115,8 @@ export default {
   },
 data(){
     return{
+      type:0,
+      times:0,
       photos:[],
         params:{},
         optionname:["A","B","C","D","E","F","G","H","I","J","K"],
@@ -126,6 +133,36 @@ data(){
     }
 },
 methods:{
+  pageHidden(evt,hidden)
+  {
+    if(hidden === false)
+  { 
+  
+if(this.times<5)
+{
+   this.$alert('请不要切换页面，这是第'+(this.times+1)+"次警告，五次后将自动提交考卷", '警告', {
+          confirmButtonText: '确定',
+          callback: action => {
+              this.times++;
+
+          }
+        });
+}
+else{
+  
+    this.params.examlist=this.examlist;
+     this.params.questions=this.questions;
+     this.params.userdetail=this.userdetail;
+
+  this.postRequest('/api/answer/submitexam',this.params).then(resp=>{   
+  
+  this.$router.push("/answer/Examanswer");
+
+     
+         })
+}
+}
+  },
   submit(){
 // console.log(this.questions)
  
@@ -139,8 +176,15 @@ methods:{
           type: 'warning'
         }).then(() => {
       this.postRequest('/api/answer/submitexam',this.params).then(resp=>{   
-  
-  this.$router.push("/answer/Examanswer");
+  if(this.type==1)
+  {
+  this.$router.push("/exam/Randomexam");
+
+  }
+  else{
+      this.$router.push("/answer/Examanswer");
+
+  }
 
      
          });
