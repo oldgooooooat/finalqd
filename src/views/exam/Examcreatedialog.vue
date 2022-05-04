@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-04-22 09:39:57
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-04 14:54:06
+ * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
 -->
@@ -18,7 +18,6 @@
  
   <el-step title="步骤 2"></el-step>
   
-  <el-step title="步骤 3"></el-step>
 
 
 </el-steps>
@@ -62,7 +61,7 @@
   <el-transfer
     filterable
     filter-placeholder="请输入题目"
-    v-show="active==2"
+    v-show="active==3"
 
     v-model="Form.userlist"
     :data="userdata"
@@ -78,8 +77,8 @@
   <div slot="footer" class="dialog-footer">
     <el-button @click="close()">取 消</el-button>
     <el-button v-show="active>0"type="primary" @click="back">上一步</el-button>
-    <el-button v-show="active<2" type="primary" @click="next">下一步</el-button>
-     <el-button v-show="active==2"type="primary" @click="submit()">提交</el-button>
+    <el-button v-show="active<1" type="primary" @click="next">下一步</el-button>
+     <el-button v-show="active==1"type="primary" @click="submit()">提交</el-button>
 
   </div>
   
@@ -109,7 +108,6 @@ data(){
           data.push({
             key: this.questionlist[i-1].questionId,
             label: `${ this.questionlist[i-1].questionName}（${this.questionlist[i-1].questionCategoryName}）`,
-            
           });
         }
         return data;

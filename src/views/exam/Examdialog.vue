@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-11 13:28:15
- * @LastEditTime: 2022-03-30 09:23:38
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-04 15:00:08
+ * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examdialog.vue
 -->
@@ -16,48 +16,46 @@
  >
                             <el-form ref="form" :model="form" label-width="80px">
 
-<el-steps :active="active" finish-status="success" v-show="bianji">
+<el-steps :active="active" finish-status="success" v-show="bianji&&fenpei">
   <el-step title="步骤 1"></el-step>
  
   <el-step title="步骤 2"></el-step>
   
-  <el-step title="步骤 3"></el-step>
-
 
 </el-steps>
   <el-tag
-  v-show="active==0"
+  v-show="active==0&&fenpei==false"
   >考试名称</el-tag>
 <el-input
-v-show="active==0"
+v-show="active==0&&fenpei==false"
   v-model="form.examdetail.examName"
   :disabled="disabled"
 >
  </el-input>
  <el-tag
- v-show="active==0"
+ v-show="active==0&&fenpei==false"
  >考试描述</el-tag>
 <el-input
-v-show="active==0"
+v-show="active==0&&fenpei==false"
   v-model="form.examdetail.examDescription"
   :disabled="disabled"
 >
  </el-input>
   <el-tag
-  v-show="active==0"
+  v-show="active==0&&fenpei==false"
   >考试持续时间</el-tag>
 <el-input
-v-show="active==0"
+v-show="active==0&&fenpei==false"
   v-model="form.examdetail.examTimeLimit"
   :disabled="disabled"
 >
  </el-input>
   <el-tag
-  v-show="active==0"
+  v-show="active==0&&fenpei==false"
   >考试起始结束时间</el-tag>
   <div>
    <el-date-picker
-   v-show="active==0"
+   v-show="active==0&&fenpei==false"
       v-model="form.examtime"
       type="datetimerange"
       range-separator="至"
@@ -79,7 +77,7 @@ v-show="active==0"
   <el-transfer
     filterable
     filter-placeholder="请输入题目"
-    v-show="active==2"
+    v-show="active==0&&fenpei==true"
     v-model="form.userlist"
     :data="userdata"
     :titles="['人员', '考试人员']"
@@ -109,11 +107,12 @@ v-show="active==0"
                             </el-form>
                             <div slot="footer" class="dialog-footer">
     <el-button type="primary" @click="close()">关  闭</el-button>
-    <el-button @click="next()" v-show="active<2&&bianji==true" >下一步</el-button>
+    <el-button @click="next()" v-show="active<1&&bianji==true" >下一步</el-button>
     <el-button @click="back()"v-show="active>0">上一步</el-button>
-     <el-button type="primary" @click="submit()" v-show="active==2">提交</el-button>
+     <el-button type="primary" @click="submit()" v-show="active==1 ">提交</el-button>
+     <el-button type="primary" @click="submit()" v-show="active==0&&fenpei==true">提交</el-button>
 
-    <el-button type="primary" v-show="!this.bianji"  @click="showquestion">题目详情</el-button>
+    <el-button type="primary" v-show="!this.bianji&&fenpei==false"  @click="showquestion">题目详情</el-button>
   
 
   </div>
@@ -128,9 +127,9 @@ export default {
         this.disabled=false 
         this.button1=true
       }
-      
      
-      console.log(this.bianji)
+     this.active==0
+      console.log(this.fenpei)
         this.form.examdetail=this.examdialoglist
         this.form.examtime.push(this.getTimestamp(this.form.examdetail.examStartDate))
         this.form.examtime.push(this.getTimestamp(this.form.examdetail.examEndDate))
@@ -255,6 +254,8 @@ this.questiondisplay=!this.questiondisplay
    close(){
      console.log(this.questionlist)
      console.log(this.examdialoglist)
+                     this.$emit('update:fenpei',false);
+
                 this.$emit('update:examdialogdisplay',false);
                 // location.reload();
             },
@@ -264,7 +265,7 @@ this.questiondisplay=!this.questiondisplay
              bianji:false,
             questionlist:[],
            examdialoglist:[],
-          
+             fenpei:false,
             examdialogdisplay: {
                 type: Boolean,
                 default: false

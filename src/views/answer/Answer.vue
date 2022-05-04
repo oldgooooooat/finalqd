@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-02 13:14:23
- * @LastEditTime: 2022-03-29 09:30:37
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-04 14:25:42
+ * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\answer.vue
 -->
@@ -24,6 +24,13 @@
       :value="item.questionCategoryId">
     </el-option>
       </el-select>
+          <el-tag>考试难度</el-tag>
+
+   <el-select v-model="form.difficulty" placeholder="请选择问题难度">
+      <el-option label="易" value=1></el-option>
+      <el-option label="中" value=2></el-option>
+      <el-option label="难" value=3></el-option>
+    </el-select>
   <el-button type="primary" plain @click="choosequestion(1)">单选题</el-button>
   <el-button type="primary" plain @click="choosequestion(2)">多选题</el-button>
   <el-button type="primary" plain @click="choosequestion(3)">判断题</el-button>
@@ -126,6 +133,7 @@ export default {
            chooseoptions:'',
            chooseoptions1:[],
            form:{
+             difficulty:'',
                category:'',
                questiontype:''
            },

@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-04-22 09:35:54
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-04 15:01:21
+ * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
 -->
@@ -37,6 +37,7 @@
           :examdialoglist="examdialoglist"
           :questionlist="questionlist"
           :bianji="bianji"
+          :fenpei="fenpei"
           :userlist="userlist"
    >
    </Exam-dialog>
@@ -98,7 +99,10 @@
       <template slot-scope="scope">
         <el-button  type="text"v-if="(scope.$index, scope.row).examSwitch!=1" @click="selectquestion1(scope.$index, scope.row)" size="small">查看</el-button>
         <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==1" @click="selectquestion2(scope.$index, scope.row)"size="small">编辑</el-button>
-                <el-button type="text" v-if="(scope.$index, scope.row).examSwitch==2" @click="closeexam(scope.$index, scope.row)"size="small">关闭</el-button>
+                          <el-button type="text" v-if="(scope.$index, scope.row).examSwitch!=3" @click="closeexam(scope.$index, scope.row)"size="small">关闭</el-button>
+
+        <el-button type="text" v-if="(scope.$index, scope.row).examSwitch!=3" @click="selectquestion3(scope.$index, scope.row)"size="small">分配</el-button>
+
    <el-button type="text"  @click="result(scope.$index, scope.row)"size="small">分数</el-button>
       </template>
           </el-table-column>
@@ -176,6 +180,7 @@ export default {
            examdialoglist:[],
            questionlist:[],
            bianji:false,
+           fenpei:false,
            examcreatedisplay:false,
            examdialogdisplay:false,
            peopleimportdisplay:false,
@@ -223,12 +228,21 @@ export default {
       },
            selectquestion1(index, row){
              this.bianji=false
+                this.fenpei=false
              this.examdialogdisplay=true;
         console.log((index,row));
         this.examdialoglist=(index,row);
        },
          selectquestion2(index, row){
            this.bianji=true
+           this.fenpei=false
+             this.examdialogdisplay=true;
+        console.log((index,row));
+        this.examdialoglist=(index,row);
+       },
+        selectquestion3(index, row){
+           this.bianji=false
+           this.fenpei=true
              this.examdialogdisplay=true;
         console.log((index,row));
         this.examdialoglist=(index,row);
