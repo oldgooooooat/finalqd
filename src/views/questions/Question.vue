@@ -7,12 +7,28 @@
       <el-breadcrumb-item>问题管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- Form -->
-    <div style="float:right">
+     <div style="float:right">
    <el-button type="success" @click="questioncategoryVisible = true" plain>科目管理</el-button>
   <el-button type="success" @click="dialogFormVisible = true" plain>添加问题</el-button>
   <el-button type="danger" @click="del()" plain>删除问题</el-button>
 
     </div>
+        <div style="float:right">
+ 
+  <el-button icon="el-icon-search" circle @click="selectquestion()"></el-button>
+ </div>
+    <div style="float:right">
+ 
+<el-input v-model="input" placeholder="请输入问题名称" ></el-input>
+
+    </div>
+
+     <div style="float:right">
+     
+<el-tag style="font-size:20px"  >搜索</el-tag>
+
+    </div>
+   
     
 <el-dialog title="添加问题" :visible.sync="dialogFormVisible">
  <el-steps :active="active" finish-status="success">
@@ -165,7 +181,11 @@
       prop="questionCategoryName"
       label="问题科目"
       width="120"
-      align="center">
+      align="center"
+        :filter-method="filtercategory"
+      :filters="this.categorytable"
+      
+      >
     </el-table-column>
     <el-table-column
       prop="questionScore"
@@ -179,13 +199,19 @@
       label="问题难度"
       width="120"
       align="center"
-      :formatter="getdiffcult">
+      :formatter="getdiffcult"
+       :filter-method="filterdifficult"
+       :filters="[{ text: '易', value: 1 }, { text: '中', value: 2 },{ text: '难', value: 3 }]"
+      >
     </el-table-column>
      <el-table-column
       prop="questionTypeId"
       label="问题类型"
       width="120"
       align="center"
+      :filter-method="filtertype"
+      :filters="[{ text: '单选题', value: 1 }, { text: '多选题', value: 2 },{ text: '判断题', value: 3 }]"
+      
       :formatter="gettype">
     </el-table-column>
   <el-table-column
@@ -257,7 +283,7 @@ import questioncategory from './Questioncategory.vue'
     data() {
       return {
               currentPage:1, //初始页
-               pagesize:10,    //    每页的数据
+               pagesize:5,    //    每页的数据
         questiondisplay:true,
         questionoptiondetail:[],
         questiondetail:[],
@@ -269,6 +295,10 @@ import questioncategory from './Questioncategory.vue'
         dx:false,
         pd:false,
         ddx:false,
+        categorytable:[{
+          text:'',
+          value:'',
+        }],
     tabledata:[{
 
     }],
@@ -281,9 +311,12 @@ import questioncategory from './Questioncategory.vue'
         questionname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         score: [{ required: true, message: '请输入分数', trigger: 'blur' }]
       },
+      input:'',
       userdetail:{
         usertype:'',
-        userid:''
+        userid:'',
+        input:''
+
       },
         form: {
           photos:"",
@@ -319,8 +352,20 @@ import questioncategory from './Questioncategory.vue'
       this.userdetail.userid=user.id
       this.userdetail.usertype=user.type
       this.postRequest("/api/question/selectallquestion",this.userdetail).then(resp=>{
-        
+          
           this.tabledata=resp.obj;
+          this.categorytable.pop()
+          for(var i=0;i<this.tabledata.length;i++)
+          {
+            const params=[{}]
+            params.text=this.tabledata[i].questionCategoryName
+            params.value=this.tabledata[i].questionCategoryName
+            this.categorytable.push(params)
+          }
+                  const res = new Map();
+                  this.categorytable=this.categorytable.filter((a) => !res.has(a.value) && res.set(a.value, 1))
+          console.log(111)
+          console.log(this.categorytable)
           console.log(this.tabledata)
       });
       this.getRequest("/api/question/getcategory").then(resp=>{
@@ -328,6 +373,36 @@ import questioncategory from './Questioncategory.vue'
       });
     },
      methods: {
+       selectquestion()
+       {
+   this.userdetail.input=this.input
+           this.postRequest("/api/question/selectallquestion",this.userdetail).then(resp=>{
+          
+          this.tabledata=resp.obj;
+          this.categorytable.length=0
+          for(var i=0;i<this.tabledata.length;i++)
+          {
+            const params=[{}]
+            params.text=this.tabledata[i].questionCategoryName
+            params.value=this.tabledata[i].questionCategoryName
+            this.categorytable.push(params)
+          }
+                  const res = new Map();
+                  this.categorytable=this.categorytable.filter((a) => !res.has(a.value) && res.set(a.value, 1))
+  
+        
+      });
+  // console.log(111)
+       },
+       filtercategory(value, row) {
+        return row.questionCategoryName === value;
+      },
+        filterdifficult(value, row) {
+        return row.questionLevelId === value;
+      },
+          filtertype(value, row) {
+        return row.questionTypeId === value;
+      },
         handleSizeChange: function (size) {
                 this.pagesize = size;
                 console.log(this.pagesize)  //每页下拉显示数据

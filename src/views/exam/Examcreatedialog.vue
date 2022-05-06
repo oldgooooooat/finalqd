@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-05-04 14:54:06
+ * @LastEditTime: 2022-05-05 10:20:17
  * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
@@ -22,7 +22,7 @@
 
 </el-steps>
 
-<el-form :model="Form" :rules="rules" ref="Form" label-width="100px">
+<el-form :model="Form" :rules="rules" ref="Form" label-width="120px">
   
   <el-form-item label="考试名称" prop="name" v-show="active==0" >
     <el-input v-model="Form.name"></el-input>
@@ -33,6 +33,15 @@
   </el-form-item>
    <el-form-item label="考试时间" prop="time" style="width:200px" v-show="active==0">
     <el-input v-model="Form.time" type="number"></el-input>
+  </el-form-item>
+
+ <el-form-item label="考试后立即回看" style="width:200px"  v-show="active==0" >
+    
+        <el-select v-model="Form.review" >
+      <el-option label="是" value="1"></el-option>
+      <el-option label="否" value="0"></el-option>
+ 
+    </el-select>
   </el-form-item>
 
      <el-form-item label="有效时间"  v-show="active==0" >
@@ -142,7 +151,7 @@ data(){
           examtime:'',
           answer:[],
           userid:'',
-          
+          review:"1",
         },
           rules: {
           name: [

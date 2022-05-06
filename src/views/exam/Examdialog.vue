@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-11 13:28:15
- * @LastEditTime: 2022-05-04 15:00:08
+ * @LastEditTime: 2022-05-05 10:23:20
  * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examdialog.vue
@@ -50,6 +50,17 @@ v-show="active==0&&fenpei==false"
   :disabled="disabled"
 >
  </el-input>
+   <el-tag
+  v-show="active==0&&fenpei==false"
+  >考试后立即回看</el-tag>
+<div>
+    <el-select v-model="form.examdetail.examReview" :disabled="disabled" >
+      <el-option label="是" :value="1"></el-option>
+      <el-option label="否" :value="0"></el-option>
+    
+    </el-select>
+</div>
+ 
   <el-tag
   v-show="active==0&&fenpei==false"
   >考试起始结束时间</el-tag>

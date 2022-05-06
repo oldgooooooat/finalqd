@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-04-14 10:59:43
- * @LastEditTime: 2022-04-14 13:46:28
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-05 08:51:25
+ * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\record\Questionwrong.vue
 -->
@@ -101,7 +101,7 @@
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
                             :current-page="currentPage"
-                            :page-sizes="[5, 10, 20, 40]" 
+                            :page-sizes="[5, 8, 20, 40]" 
                             :page-size="pagesize"         
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="questionlist.length">    
@@ -132,7 +132,7 @@ export default {
 data(){
     return{
               currentPage:1, //初始页
-               pagesize:10,    //    每页的数据
+               pagesize:8,    //    每页的数据
    userdetail:{
         usertype:'',
         userid:''
