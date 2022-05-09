@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-05-05 10:20:17
+ * @LastEditTime: 2022-05-09 11:34:42
  * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
@@ -31,7 +31,7 @@
     <el-form-item label="考试描述" prop="context" v-show="active==0">
     <el-input v-model="Form.context"></el-input>
   </el-form-item>
-   <el-form-item label="考试时间" prop="time" style="width:200px" v-show="active==0">
+   <el-form-item label="考试时间" prop="time" style="width:300px" v-show="active==0">
     <el-input v-model="Form.time" type="number"></el-input>
   </el-form-item>
 
@@ -101,6 +101,7 @@ import  { getCookie }from '../../utils/util.js';
 
 export default {
     mounted(){
+   
         console.log(111);
         this.question=this.questionlist;
       //   this.getRequest("/api/t-user/getalluser").then(resp=>{
@@ -116,7 +117,7 @@ data(){
         for (let i = 1; i <= this.questionlist.length; i++) {
           data.push({
             key: this.questionlist[i-1].questionId,
-            label: `${ this.questionlist[i-1].questionName}（${this.questionlist[i-1].questionCategoryName}）`,
+            label: `（${this.questionlist[i-1].questionTypename}）${ this.questionlist[i-1].questionName}（${this.questionlist[i-1].questionCategoryName}）`,
           });
         }
         return data;
@@ -137,13 +138,14 @@ data(){
 
     return{
 
-        
+      
                 active: 0,
                 activedisplay:true,
                 actived1isplay:false,
             data:generateData(),
             userdata:generateuserData(),
         Form: {
+    
           userlist:[],
           name: '',
           context:'',
@@ -201,7 +203,9 @@ data(){
 
         // const user=JSON.parse(getCookie('user'));
         this.Form.userid=user.id;
+       
 this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
+
         this.active--
         this.activedisplay=true;
         this.actived1isplay=false;
@@ -210,7 +214,7 @@ this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
         this.Form.time='';
         this.Form.examtime='';
         this.Form.answer=[];
-        location.reload();
+         location.reload();
          
       })
       this.$emit('update:examcreatedisplay',false);

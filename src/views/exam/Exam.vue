@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:19:44
- * @LastEditTime: 2022-05-05 10:10:43
+ * @LastEditTime: 2022-05-09 09:15:33
  * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\exam.vue
@@ -152,8 +152,24 @@ export default {
           console.log(this.userlist)
       });
  this.postRequest("/api/question/selectallquestion",this.userdetail).then(resp=>{
-      
-          this.questionlist=resp.obj;
+       
+                   this.questionlist=resp.obj;
+
+         for(let i=0;i<this.questionlist.length;i++)
+         {
+           if(this.questionlist[i].questionTypeId==1)
+           {
+             this.questionlist[i].questionTypename='单选'
+           }
+             if(this.questionlist[i].questionTypeId==2)
+           {
+             this.questionlist[i].questionTypename='多选'
+           }
+             if(this.questionlist[i].questionTypeId==3)
+           {
+             this.questionlist[i].questionTypename='判断'
+           }
+         }
           
       });
  this.postRequest("/api/exam/getallexam",this.userdetail).then(resp=>{
@@ -174,7 +190,8 @@ export default {
                pagesize:5,    //    每页的数据
       userdetail:{
         usertype:'',
-        userid:''
+        userid:'',
+        input:''
       },
            userlist:[],
            examlist:[],
