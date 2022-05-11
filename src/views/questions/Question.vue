@@ -8,6 +8,7 @@
     </el-breadcrumb>
     <!-- Form -->
      <div style="float:right">
+                   <el-button type="primary" plain style="float:right" @click="questionimportdisplay=true">导入问题</el-button>
    <el-button type="success" @click="questioncategoryVisible = true" plain>科目管理</el-button>
   <el-button type="success" @click="dialogFormVisible = true" plain>添加问题</el-button>
   <el-button type="danger" @click="del()" plain>删除问题</el-button>
@@ -263,6 +264,12 @@
           v-if="questioncategoryVisible"
           >
          </question-category>
+         <question-import
+         :questionimportdisplay.sync="questionimportdisplay"
+          v-if="questionimportdisplay"
+         >
+  
+         </question-import>
   </div>
   </div>
 </template>
@@ -272,18 +279,23 @@ import Pagination from '../../components/Pagination';
 import  { getCookie }from '../../utils/util.js';
 import questiondialog from'./Questiondialog.vue'
 import questioncategory from './Questioncategory.vue'
+import questionimport from './Questionimport.vue'
  export const type={'1':'单选题','2':'多选题','3':'判断题'}
   export const difficult={'1':'易','2':'中','3':'难'}
 
  export default {
    components:{
   'question-dialog':questiondialog,
-  'question-category':questioncategory
+  'question-category':questioncategory,
+  'question-import':questionimport,
+     
    },
     data() {
       return {
+        
               currentPage:1, //初始页
                pagesize:5,    //    每页的数据
+               questionimportdisplay:false,
         questiondisplay:true,
         questionoptiondetail:[],
         questiondetail:[],

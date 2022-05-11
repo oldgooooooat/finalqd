@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-07 09:55:31
- * @LastEditTime: 2022-05-09 11:34:42
+ * @LastEditTime: 2022-05-11 10:51:49
  * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Examcreate.vue
@@ -35,6 +35,27 @@
     <el-input v-model="Form.time" type="number"></el-input>
   </el-form-item>
 
+   <el-form-item label="科目"  style="width:300px" v-show="active==0">
+    <el-select  v-model="Form.category" placeholder="请选择" >
+    <el-option
+      v-for="item in category"
+      :key="item.value"
+      :label="item.questionCategoryName"
+      :value="item.questionCategoryId">
+    </el-option>
+      </el-select>
+        </el-form-item>
+
+
+ <el-form-item label="单选题数量"  style="width:300px" v-show="active==0">
+    <el-input v-model="Form.danxuan" type="number"></el-input>
+  </el-form-item>
+   <el-form-item label="多选题数量"  style="width:300px" v-show="active==0">
+    <el-input v-model="Form.duoxuan" type="number"></el-input>
+  </el-form-item>
+   <el-form-item label="判断题数量"  style="width:300px" v-show="active==0">
+    <el-input v-model="Form.panduan" type="number"></el-input>
+  </el-form-item>
  <el-form-item label="考试后立即回看" style="width:200px"  v-show="active==0" >
     
         <el-select v-model="Form.review" >
@@ -101,7 +122,8 @@ import  { getCookie }from '../../utils/util.js';
 
 export default {
     mounted(){
-   
+
+      console.log(this.category)
         console.log(111);
         this.question=this.questionlist;
       //   this.getRequest("/api/t-user/getalluser").then(resp=>{
@@ -138,14 +160,18 @@ data(){
 
     return{
 
-      
+            
                 active: 0,
                 activedisplay:true,
                 actived1isplay:false,
             data:generateData(),
             userdata:generateuserData(),
+          
         Form: {
-    
+          category:3,
+            danxuan:0,
+            duoxuan:0,
+            panduan:0,
           userlist:[],
           name: '',
           context:'',
@@ -214,7 +240,7 @@ this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
         this.Form.time='';
         this.Form.examtime='';
         this.Form.answer=[];
-         location.reload();
+        //  location.reload();
          
       })
       this.$emit('update:examcreatedisplay',false);
@@ -231,6 +257,7 @@ this.postRequest("/api/exam/addexam",this.Form).then(resp=>{
 },
  props: {
    userlist:[],
+     category:[],
             questionlist:[],
             examcreatedisplay: {
                 type: Boolean,
