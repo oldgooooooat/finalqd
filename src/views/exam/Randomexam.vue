@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-31 09:09:31
- * @LastEditTime: 2022-05-05 10:29:16
+ * @LastEditTime: 2022-05-13 10:26:19
  * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\exam\Randomexam.vue
@@ -42,6 +42,11 @@
       <el-table-column
         prop="examScore"
         label="考试总分"
+        width="180">
+      </el-table-column>
+         <el-table-column
+        prop="category"
+        label="考试科目"
         width="180">
       </el-table-column>
 

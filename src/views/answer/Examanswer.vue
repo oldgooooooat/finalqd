@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-03-17 09:05:29
- * @LastEditTime: 2022-04-11 14:38:41
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-13 10:19:11
+ * @LastEditors: oldgooooooat 2697055747@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \exam\src\views\answer\Examanswer.vue
 -->
@@ -38,6 +38,11 @@
    <el-table-column
         prop="examScore"
         label="考试总分"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="category"
+        label="考试科目"
         width="180">
       </el-table-column>
       <el-table-column
